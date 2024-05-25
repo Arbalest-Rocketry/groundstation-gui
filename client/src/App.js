@@ -6,6 +6,7 @@ import Setting from './components/Setting'
 import Navbar from './components/Navbar';
 import DropdownMenu from './components/DropDownMenu';
 import RealTimeChart from './components/RealTimeChart';
+import Analysis from './components/analysis';
 
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -33,6 +34,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/realTimeChart" element={<RealTimeChart />} />
           <Route path="/setting" element={<Setting/>}></Route>
+          <Route path="/analysis" element={<Analysis/>}></Route>
         </Routes>
                 </div>
             </div>
