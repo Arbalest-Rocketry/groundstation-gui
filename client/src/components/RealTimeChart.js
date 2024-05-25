@@ -10,7 +10,7 @@ const RealTimeChart = () => {
   const [socket, setSocket] = useState(null);
   const [serverIp, setServerIp] = useState('');
 
-  const defaultPort = '5000'; // 기본 포트 설정
+  const defaultPort = '5000'; // set default port
 
   const handleGraphUpdate = (message) => {
     const timestamp = new Date(message.timestamp);
