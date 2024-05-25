@@ -4,7 +4,11 @@
 # Root of the folder
 ```
 ├── client
+    ├──src
+    ├──public
 ├── server
+    ├──app.py
+    ├──venv
 ├── transceiver
 └── README.md
 ```
@@ -20,8 +24,13 @@ This directory contains the Arduino sketches (.ino files) for various boards use
 # Testing Setup
 
 1. Upload any .ino scripts in transceiver directory to breadboard
-2. You need to run the server in the directory server
+2. You need to run the server in the directory server. keep connected to the board.
 ```
+source venv/Scripts/ativate
 run server.py
 ```
 3. launch client
+move the commend prompt to client
+```
+npm start
+```
