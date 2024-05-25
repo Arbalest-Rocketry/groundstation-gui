@@ -29,8 +29,8 @@ This directory contains the Arduino sketches (.ino files) for various boards use
 source venv/Scripts/ativate
 run server.py
 ```
-3. launch client
-move the commend prompt to client
+3. launch client <br>
+Open another command prompt, navigate to client<br>
 ```
 npm start
 ```
