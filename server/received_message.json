@@ -1,0 +1,254 @@
+[
+  {
+    "timestamp": "2024-05-25T00:51:51.493632",
+    "altitude": 944,
+    "pressure": 330,
+    "temperature": 21
+  },
+  {
+    "timestamp": "2024-05-25T00:51:52.503610",
+    "altitude": 340,
+    "pressure": 219,
+    "temperature": 26
+  },
+  {
+    "timestamp": "2024-05-25T00:51:53.516870",
+    "altitude": 131,
+    "pressure": 55,
+    "temperature": 30
+  },
+  {
+    "timestamp": "2024-05-25T00:51:54.529075",
+    "altitude": 841,
+    "pressure": 476,
+    "temperature": 7
+  },
+  {
+    "timestamp": "2024-05-25T00:51:55.539301",
+    "altitude": 364,
+    "pressure": 449,
+    "temperature": 10
+  },
+  {
+    "timestamp": "2024-05-25T00:51:56.553427",
+    "altitude": 91,
+    "pressure": 286,
+    "temperature": 2
+  },
+  {
+    "timestamp": "2024-05-25T00:51:57.570191",
+    "altitude": 448,
+    "pressure": 167,
+    "temperature": 1
+  },
+  {
+    "timestamp": "2024-05-25T00:51:58.582145",
+    "altitude": 804,
+    "pressure": 80,
+    "temperature": 35
+  },
+  {
+    "timestamp": "2024-05-25T00:51:59.594694",
+    "altitude": 303,
+    "pressure": 407,
+    "temperature": 26
+  },
+  {
+    "timestamp": "2024-05-25T00:52:00.605457",
+    "altitude": 368,
+    "pressure": 169,
+    "temperature": 33
+  },
+  {
+    "timestamp": "2024-05-25T00:52:01.617016",
+    "altitude": 876,
+    "pressure": 221,
+    "temperature": 26
+  },
+  {
+    "timestamp": "2024-05-25T00:53:39.558248",
+    "altitude": 165,
+    "pressure": 210,
+    "temperature": 25
+  },
+  {
+    "timestamp": "2024-05-25T00:53:40.576274",
+    "altitude": 72,
+    "pressure": 303,
+    "temperature": 20
+  },
+  {
+    "timestamp": "2024-05-25T00:53:41.593682",
+    "altitude": 108,
+    "pressure": 372,
+    "temperature": 4
+  },
+  {
+    "timestamp": "2024-05-25T00:53:42.616877",
+    "altitude": 975,
+    "pressure": 347,
+    "temperature": 22
+  },
+  {
+    "timestamp": "2024-05-25T00:53:43.631108",
+    "altitude": 161,
+    "pressure": 36,
+    "temperature": 36
+  },
+  {
+    "timestamp": "2024-05-25T00:53:44.643628",
+    "altitude": 464,
+    "pressure": 384,
+    "temperature": 13
+  },
+  {
+    "timestamp": "2024-05-25T00:53:45.654916",
+    "altitude": 227,
+    "pressure": 234,
+    "temperature": 13
+  },
+  {
+    "timestamp": "2024-05-25T00:53:46.683085",
+    "altitude": 896,
+    "pressure": 418,
+    "temperature": 29
+  },
+  {
+    "timestamp": "2024-05-25T00:53:47.701008",
+    "altitude": 555,
+    "pressure": 245,
+    "temperature": 8
+  },
+  {
+    "timestamp": "2024-05-25T00:53:48.716330",
+    "altitude": 79,
+    "pressure": 478,
+    "temperature": 2
+  },
+  {
+    "timestamp": "2024-05-25T00:53:49.741537",
+    "altitude": 65,
+    "pressure": 132,
+    "temperature": 11
+  },
+  {
+    "timestamp": "2024-05-25T00:53:50.763496",
+    "altitude": 600,
+    "pressure": 325,
+    "temperature": 5
+  },
+  {
+    "timestamp": "2024-05-25T00:53:51.779016",
+    "altitude": 475,
+    "pressure": 39,
+    "temperature": 30
+  },
+  {
+    "timestamp": "2024-05-25T00:53:52.798583",
+    "altitude": 504,
+    "pressure": 310,
+    "temperature": 25
+  },
+  {
+    "timestamp": "2024-05-25T00:53:53.812566",
+    "altitude": 361,
+    "pressure": 189,
+    "temperature": 19
+  },
+  {
+    "timestamp": "2024-05-25T00:53:54.842328",
+    "altitude": 318,
+    "pressure": 410,
+    "temperature": 35
+  },
+  {
+    "timestamp": "2024-05-25T00:55:38.867113",
+    "altitude": 263,
+    "pressure": 94
+  },
+  {
+    "timestamp": "2024-05-25T00:55:39.945159",
+    "altitude": 334,
+    "pressure": 282
+  },
+  {
+    "timestamp": "2024-05-25T00:55:41.016732",
+    "altitude": 896,
+    "pressure": 20
+  },
+  {
+    "timestamp": "2024-05-25T00:55:42.043731",
+    "altitude": 205,
+    "pressure": 19
+  },
+  {
+    "timestamp": "2024-05-25T00:55:43.086772",
+    "altitude": 899,
+    "pressure": 378
+  },
+  {
+    "timestamp": "2024-05-25T00:55:44.135828",
+    "altitude": 939,
+    "pressure": 61
+  },
+  {
+    "timestamp": "2024-05-25T00:55:45.250761",
+    "altitude": 619,
+    "pressure": 8
+  },
+  {
+    "timestamp": "2024-05-25T00:55:46.274800",
+    "altitude": 639,
+    "pressure": 146
+  },
+  {
+    "timestamp": "2024-05-25T00:55:47.294372",
+    "altitude": 511,
+    "pressure": 309
+  },
+  {
+    "timestamp": "2024-05-25T00:55:48.315261",
+    "altitude": 267,
+    "pressure": 403
+  },
+  {
+    "timestamp": "2024-05-25T00:55:49.329156",
+    "altitude": 697,
+    "pressure": 52
+  },
+  {
+    "timestamp": "2024-05-25T00:55:50.353622",
+    "altitude": 403,
+    "pressure": 408
+  },
+  {
+    "timestamp": "2024-05-25T00:55:51.367420",
+    "altitude": 576,
+    "pressure": 459
+  },
+  {
+    "timestamp": "2024-05-25T00:55:52.383630",
+    "altitude": 448,
+    "pressure": 409
+  },
+  {
+    "timestamp": "2024-05-25T00:55:53.398380",
+    "altitude": 655,
+    "pressure": 142
+  },
+  {
+    "timestamp": "2024-05-25T00:55:54.425721",
+    "altitude": 705,
+    "pressure": 317
+  },
+  {
+    "timestamp": "2024-05-25T00:55:55.437842",
+    "altitude": 452,
+    "pressure": 272
+  },
+  {
+    "timestamp": "2024-05-25T00:55:56.494659",
+    "altitude": 789,
+    "pressure": 78
+  }
+]

@@ -49,7 +49,7 @@ void loop() {
     char jsonBuffer[200];
     jsonDoc["altitude"] = randomAlt;
     jsonDoc["pressure"] = randomPress;
-    jsonDoc["temperature"] = randomTemp;
+//    jsonDoc["temperature"] = randomTemp;
     serializeJson(jsonDoc, jsonBuffer);
     Serial.write(jsonBuffer);
     Serial.write('\n');

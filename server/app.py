@@ -3,34 +3,56 @@ from flask_socketio import SocketIO, emit
 from flask_cors import CORS
 import json
 import serial
+import serial.tools.list_ports
 from datetime import datetime
 import os
 
 # Serial port setup
-SERIAL_PORT = 'COM5'
 BAUD_RATE = 9600
+
+#find 
+def find_serial_port():
+    ports = serial.tools.list_ports.comports()
+    for port in ports:
+        print(f"Found port: {port.device}, Description: {port.description}")
+        # Update the condition based on the actual description
+        if 'USB' in port.description:
+            return port.device
+    return None
+
+SERIAL_PORT = find_serial_port()
+if not SERIAL_PORT:
+    raise Exception("No compatible serial port found")
+
+print(f"Using serial port: {SERIAL_PORT}")
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})  # allow every paths to access
 socketio = SocketIO(app, cors_allowed_origins="*")
 app.config['SECRET_KEY'] = 'secret!'
 
-ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
+try:
+    ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
+except serial.SerialException as e:
+    raise Exception(f"Could not open serial port {SERIAL_PORT}: {e}")
 
 def open_serial_port():
     while True:
         socketio.sleep(1)
-        if ser.in_waiting > 0:
-            line = ser.readline().decode('utf-8').strip()
-            try:
-                data = json.loads(line)
-                print(data)
+        try:
+            if ser.in_waiting > 0:
+                line = ser.readline().decode('utf-8').strip()
+                try:
+                    data = json.loads(line)
+                    print(data)
 
-                data_with_timestamp = add_timestamp(data)
-                save_to_json_file(data_with_timestamp)
-                socketio.emit('graph_update', data_with_timestamp ,  namespace='/client')
-            except json.JSONDecodeError as e:
-                print('JSON parsing error', e)
+                    data_with_timestamp = add_timestamp(data)
+                    save_to_json_file(data_with_timestamp)
+                    socketio.emit('graph_update', data_with_timestamp, namespace='/client')
+                except json.JSONDecodeError as e:
+                    print('JSON parsing error', e)
+        except serial.SerialException as e:
+            print(f"Serial communication error: {e}")
 
 def add_timestamp(data):
     timestamp = datetime.now().isoformat()
@@ -52,7 +74,7 @@ def save_to_json_file(data):
     except Exception as e:
         print(f'Error saving data to JSON file: {e}')
 
-@socketio.on('connect' , namespace='/client')
+@socketio.on('connect', namespace='/client')
 def client_connect():
     emit('response', {'data': 'Connected to /client'})
 
@@ -63,7 +85,6 @@ def client_disconnect():
 @app.route('/')
 def index():
     return "Server is running!"
-
 
 if __name__ == '__main__':
     socketio.start_background_task(target=open_serial_port)
