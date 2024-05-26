@@ -1,0 +1,36 @@
+/* RealTimeChart.css */
+.chart-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 기본적으로 두 개의 컬럼으로 설정 */
+    gap: 10px; /* 차트 간격을 설정 */
+  }
+  
+  .chart-container > div {
+    min-width: 0px; /* 각 차트의 최소 너비를 설정 */
+    margin: 10px;
+    border: 1px solid transparent; /* 기본 테두리 설정 */
+    transition: border-color 0.3s; /* 테두리 색상 전환 애니메이션 */
+  }
+  
+  .chart-container > div.highlighted {
+    border: 2px solid green; /* 강조된 차트의 테두리를 초록색으로 설정 */
+  }
+  
+  .chart-links {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .chart-links button{
+    margin-right: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  .ip-connection-button{
+    margin-left: 10px;
+  }
+  @media (max-width: 1200px) {
+    .chart-container {
+      grid-template-columns: repeat(1, 1fr); /* 한 개의 컬럼으로 설정 */
+    }
+  }

@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import io from 'socket.io-client';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import useSocket from '../Socket';
 import Chart from './Chart.js';
+import '../css/RealTimeChart.css';
 
 const RealTimeChart = () => {
-  const [data, setData] = useState([]);
-  const [isUpdating, setIsUpdating] = useState(true);
-  const [keys, setKeys] = useState([]);
-  const [isConnected, setIsConnected] = useState(false);
-  const [socket, setSocket] = useState(null);
   const [serverIp, setServerIp] = useState('');
+  const [data, setData] = useState([]);
+  const [keys, setKeys] = useState([]);
+  const [highlightedKey, setHighlightedKey] = useState(null); // 강조된 차트를 추적하기 위한 상태 추가
+  const { socket, isConnected, connectToServer, setIsConnected } = useSocket(serverIp);
+  const chartRefs = useRef({});
 
-  const defaultPort = '5000'; // set default port
-
-  const handleGraphUpdate = (message) => {
+  const handleGraphUpdate = useCallback((message) => {
     const timestamp = new Date(message.timestamp);
     const hours = timestamp.getHours();
     const minutes = timestamp.getMinutes();
@@ -26,70 +25,55 @@ const RealTimeChart = () => {
       const newKeys = new Set([...prevKeys, ...messageKeys]);
       return Array.from(newKeys);
     });
-  };
-
-  const handleConnect = () => {
-    console.log('connected to socket.io server');
-    setIsConnected(true);
-  };
-
-  const handleDisconnect = () => {
-    console.log('disconnected from socket.io server');
-    setIsConnected(false);
-  };
-
-  const handleError = (error) => {
-    console.error('connection error:', error);
-    setIsConnected(false);
-  };
+  }, []);
 
   useEffect(() => {
-    let isMounted = true;
-
     if (socket) {
-      socket.on('connect', handleConnect);
-      socket.on('disconnect', handleDisconnect);
-      socket.on('connect_error', handleError);
       socket.on('graph_update', handleGraphUpdate);
 
       return () => {
-        socket.off('connect', handleConnect);
-        socket.off('disconnect', handleDisconnect);
-        socket.off('connect_error', handleError);
         socket.off('graph_update', handleGraphUpdate);
-        if (isMounted) {
-          socket.close();
-        }
       };
     }
-
-    return () => {
-      isMounted = false;
-    };
-  }, [socket]);
+  }, [socket, handleGraphUpdate]);
 
   const handleIpChange = (e) => {
     setServerIp(e.target.value);
   };
 
-  const connectToServer = () => {
-    if (socket) {
-      socket.disconnect();
-      socket.close();
+  const scrollToChart = (key) => {
+    if (chartRefs.current[key]) {
+      chartRefs.current[key].scrollIntoView({ behavior: 'smooth' });
     }
-    const serverUrl = `http://${serverIp}:${defaultPort}/client`;
-    const newSocket = io(serverUrl, {
-      transports: ['websocket', 'polling'],
-    });
+    handleChartClick(key);
+  };
 
-    setSocket(newSocket);
-    setData([]);
-    setKeys([]);
-    setIsConnected(false);
+  const handleChartClick = (key) => {
+    setHighlightedKey(key); // 특정 차트를 클릭했을 때 해당 키를 설정
+  };
+
+  const handleContainerClick = (e) => {
+    if (e.target.className === 'chart-container') {
+      setHighlightedKey(null); // 빈 곳을 클릭했을 때 강조를 제거
+    }
+  };
+
+
+
+  const toggleConnection = () => {
+    if (isConnected) {
+      if (socket) {
+        socket.disconnect();
+        socket.close();
+      }
+      setIsConnected(false);
+    } else {
+      connectToServer();
+    }
   };
 
   return (
-    <div>
+    <div onClick={handleContainerClick}>
       <h1>Real-time Data Chart</h1>
       <p>Status: {isConnected ? 'Connected' : 'Disconnected'}</p>
       <div>
@@ -99,14 +83,27 @@ const RealTimeChart = () => {
           onChange={handleIpChange}
           placeholder="Enter server IP"
         />
-        <button onClick={connectToServer}>Connect</button>
+        <button className ="ip-connection-button" onClick={toggleConnection}>{isConnected ? 'Disconnect' : 'Connect'}</button>
       </div>
-      <button onClick={() => setIsUpdating(!isUpdating)}>
-        {isUpdating ? 'Stop Updates' : 'Start Updates'}
-      </button>
-      {keys.map((key, index) => (
-        <Chart key={index} data={data} dataKey={key}></Chart>
-      ))}
+      <div className="chart-links">
+        {keys.map((key) => (
+          <button key={key} onClick={() => scrollToChart(key)}>
+            {key}
+          </button>
+        ))}
+      </div>
+      <div className="chart-container">
+        {keys.map((key, index) => (
+          <div
+            key={index}
+            ref={(el) => (chartRefs.current[key] = el)}
+            onClick={() => handleChartClick(key)}
+            className={highlightedKey === key ? 'highlighted' : ''}
+          >
+            <Chart data={data} dataKey={key} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

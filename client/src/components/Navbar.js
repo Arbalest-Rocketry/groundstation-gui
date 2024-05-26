@@ -37,7 +37,7 @@ const Navbar = () => {
             </a>
             <a
               className="list-group-item list-group-item-action list-group-item-light p-3"
-              href="https://github.com/Arbalest-Rocketry/Ground-Station-GUI"
+              href="https://github.com/Arbalest-Rocketry/groundstation-gui"
               target="_blank"
               rel="noopener noreferrer"
             >
