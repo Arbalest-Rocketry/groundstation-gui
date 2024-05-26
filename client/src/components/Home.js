@@ -9,7 +9,7 @@ const Home = () => {
   const items = [
     { id: '', name: 'home' },
     { id: 'realTimeChart', name: 'Real-time graph' },
-    { id: 'setting', name: 'Setting' }
+    { id: 'analysis', name: 'Analysis' }
   ];
 
   return (
