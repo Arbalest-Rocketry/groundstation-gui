@@ -38,7 +38,7 @@ except serial.SerialException as e:
 
 def open_serial_port():
     while True:
-        socketio.sleep(1)
+        socketio.sleep(0.001)
         try:
             if ser.in_waiting > 0:
                 line = ser.readline().decode('utf-8').strip()
