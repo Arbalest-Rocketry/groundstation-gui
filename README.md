@@ -1,6 +1,6 @@
 # Ground-Station-GUI
 <div style="display: flex; flex-direction: row;">
-![image](https://github.com/Arbalest-Rocketry/groundstation-gui/assets/realTimeGraph.png)
+![image](https://github.com/Arbalest-Rocketry/groundstation-gui/realTimeGraph.png)
 
 # Root of the folder
 ```
