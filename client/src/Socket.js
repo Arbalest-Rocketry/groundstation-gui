@@ -25,11 +25,10 @@ const useSocket = (serverIp, defaultPort = '5000') => {
   useEffect(() => {
     let isMounted = true;
 
-    if (socket && isUpdating) {
+    if (socket) {
       socket.on('connect', handleConnect);
       socket.on('disconnect', handleDisconnect);
       socket.on('connect_error', handleError);
-
       return () => {
         socket.off('connect', handleConnect);
         socket.off('disconnect', handleDisconnect);
@@ -43,7 +42,7 @@ const useSocket = (serverIp, defaultPort = '5000') => {
     return () => {
       isMounted = false;
     };
-  }, [socket, handleConnect, handleDisconnect, handleError, isUpdating]);
+  }, [socket, handleConnect, handleDisconnect, handleError]);
 
   const connectToServer = useCallback(() => {
     if (socket) {
@@ -63,8 +62,10 @@ const useSocket = (serverIp, defaultPort = '5000') => {
   return {
     socket,
     isConnected,
+    isUpdating,
     connectToServer,
     setIsConnected, // 추가된 부분
+    setIsUpdating
   };
 };
 
