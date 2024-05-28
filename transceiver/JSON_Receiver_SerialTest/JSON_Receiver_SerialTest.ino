@@ -44,7 +44,7 @@ void loop() {
     uint8_t bufReceived[RH_RF95_MAX_MESSAGE_LEN];
       uint8_t len = sizeof(bufReceived); // Length of received data
     if (rf95.recv(bufReceived, &len)) {
-      StaticJsonDocument<2000> jsonDoc;
+      DynamicJsonDocument jsonDoc;
       DeserializationError error = deserializeJson(jsonDoc, bufReceived, len);
       
    if (error) {
@@ -61,4 +61,4 @@ void loop() {
 
   
   delay(1000); // Delay for 1 second between data sends
-}
+}}}

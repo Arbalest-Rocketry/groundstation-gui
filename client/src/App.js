@@ -8,6 +8,7 @@ import DropdownMenu from './components/DropDownMenu';
 import RealTimeChart from './components/RealTimeChart';
 import Analysis from './components/analysis';
 
+
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/styles.css'
@@ -23,7 +24,6 @@ const App = () => {
   };
   return (
     <div className={`d-flex ${isToggled ? 'sb-sidenav-toggled' : ''}`} id="wrapper">
-
       <Router>
       <Navbar />
         <div id="page-content-wrapper">
