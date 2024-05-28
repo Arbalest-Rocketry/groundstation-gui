@@ -7,9 +7,10 @@ const RealTimeChart = () => {
   const [serverIp, setServerIp] = useState('');
   const [data, setData] = useState([]);
   const [keys, setKeys] = useState([]);
-  const [highlightedKey, setHighlightedKey] = useState(null); // 강조된 차트를 추적하기 위한 상태 추가
+  const [highlightedKey, setHighlightedKey] = useState(null);
   const { socket, isConnected, connectToServer, setIsConnected } = useSocket(serverIp);
   const chartRefs = useRef({});
+  const [isUpdating, setIsUpdating] = useState(false); // 상태 추가: 업데이트 중인지 여부
 
   const handleGraphUpdate = useCallback((message) => {
     const timestamp = new Date(message.timestamp);
@@ -49,16 +50,14 @@ const RealTimeChart = () => {
   };
 
   const handleChartClick = (key) => {
-    setHighlightedKey(key); // 특정 차트를 클릭했을 때 해당 키를 설정
+    setHighlightedKey(key);
   };
 
   const handleContainerClick = (e) => {
     if (e.target.className === 'chart-container') {
-      setHighlightedKey(null); // 빈 곳을 클릭했을 때 강조를 제거
+      setHighlightedKey(null);
     }
   };
-
-
 
   const toggleConnection = () => {
     if (isConnected) {
@@ -72,6 +71,27 @@ const RealTimeChart = () => {
     }
   };
 
+  const toggleUpdate = () => {
+    if (isUpdating) {
+      if (socket) {
+        socket.emit('graph_update_stop');
+      }
+      setIsUpdating(false);
+    } else {
+      if (socket) {
+        socket.emit('graph_update_request');
+      }
+      setIsUpdating(true);
+    }
+  };
+
+  useEffect(() => {
+    if (isConnected && socket) {
+      socket.emit('graph_update_request');
+      setIsUpdating(true);
+    }
+  }, [isConnected, socket]);
+
   return (
     <div onClick={handleContainerClick}>
       <h1>Real-time Data Chart</h1>
@@ -83,7 +103,14 @@ const RealTimeChart = () => {
           onChange={handleIpChange}
           placeholder="Enter server IP"
         />
-        <button className ="ip-connection-button" onClick={toggleConnection}>{isConnected ? 'Disconnect' : 'Connect'}</button>
+        <button className="ip-connection-button" onClick={toggleConnection}>
+          {isConnected ? 'Disconnect' : 'Connect'}
+        </button>
+        {isConnected && (
+          <button className="update-button" onClick={toggleUpdate}>
+            {isUpdating ? 'Stop Updates' : 'Start Updates'}
+          </button>
+        )}
       </div>
       <div className="chart-links">
         {keys.map((key) => (

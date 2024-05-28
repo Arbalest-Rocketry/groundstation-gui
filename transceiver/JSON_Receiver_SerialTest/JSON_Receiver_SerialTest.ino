@@ -58,10 +58,7 @@ void loop() {
     Serial.write('\n');
     
   }
-    }
-      // Parse received JSON
-    // Serialize data into JSON format and send via serial
-  }
+
   
   delay(1000); // Delay for 1 second between data sends
 }

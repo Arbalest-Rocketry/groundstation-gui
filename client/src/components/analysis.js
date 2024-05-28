@@ -1,17 +1,24 @@
-import React, { useState } from 'react';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 
-import { Calendar } from 'react-date-range';
+import React, { useState } from 'react';
+import { DateRangePicker } from 'react-date-range';
 
 const Analysis = () => {
-  const handleSelect = (date) => {
-    console.log(date); // native Date object
+  const [selectionRange, setSelectionRange] = useState({
+    startDate: new Date(),
+    endDate: new Date(),
+    key: 'selection',
+  });
+
+  const handleSelect = (ranges) => {
+    console.log(ranges);
+    setSelectionRange(ranges.selection);
   };
 
   return (
-    <Calendar
-      date={new Date()}
+    <DateRangePicker
+      ranges={[selectionRange]}
       onChange={handleSelect}
     />
   );
