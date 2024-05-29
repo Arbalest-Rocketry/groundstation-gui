@@ -64,7 +64,7 @@ source venv/Scripts/activate
 #### Install the dependencies:
 
 ```
-pip install -r dependencies.txt
+bash setup.sh
 ```
 
 #### Run the server:
