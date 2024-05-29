@@ -29,8 +29,7 @@ void setup() {
   if (!rf95.setFrequency(RF95_FREQ)) {
     Serial.println("setFrequency failed");
     while (1);
-  }else 
-  {
+  } else {
     Serial.println("setFrequency Success");
   }
   rf95.setTxPower(23, false);
@@ -38,27 +37,26 @@ void setup() {
 
 void loop() {
   unsigned long currentTime = millis();
-     
 
-  if (rf95.available()){
+  if (rf95.available()) {
     uint8_t bufReceived[RH_RF95_MAX_MESSAGE_LEN];
-      uint8_t len = sizeof(bufReceived); // Length of received data
+    uint8_t len = sizeof(bufReceived); // Length of received data
     if (rf95.recv(bufReceived, &len)) {
-      DynamicJsonDocument jsonDoc;
+      DynamicJsonDocument jsonDoc(256);
       DeserializationError error = deserializeJson(jsonDoc, bufReceived, len);
       
-   if (error) {
-          Serial.print(F("deserializeJson() failed: "));
-          Serial.println(error.c_str());
-   } else {
-    
-    char jsonBuffer[2000];
-    serializeJson(jsonDoc, jsonBuffer);
-    Serial.write(jsonBuffer);
-    Serial.write('\n');
-    
-  }
+      if (error) {
+        Serial.print(F("deserializeJson() failed: "));
+        Serial.println(error.c_str());
+      } else {
+        // Create a JSON string to send over Serial
+        String jsonString;
+        serializeJson(jsonDoc, jsonString);
+        Serial.write(jsonString.c_str(), jsonString.length());
+        Serial.write('\n'); // Add a newline character for better readability
+      }
 
-  
-  delay(1000); // Delay for 1 second between data sends
-}}}
+//      delay(1000); // Delay for 1 second between data sends
+    }
+  }
+}

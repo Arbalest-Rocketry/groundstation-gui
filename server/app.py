@@ -9,7 +9,7 @@ import os
 
 # Serial port setup
 BAUD_RATE = 9600
-
+socketSleep = 0.1
 # Find serial port
 def find_serial_port():
     ports = serial.tools.list_ports.comports()
@@ -36,13 +36,15 @@ app.config['SECRET_KEY'] = 'secret!'
 
 should_run = False  # decide whether to receive data from teensy
 
-def save_to_json_background_task():
+def save_and_send_data_background_task():
     while True:
-        socketio.sleep(1)
+        socketio.sleep(socketSleep)
         data_with_timestamp = read_serial()
-        print('saved', data_with_timestamp)
         if data_with_timestamp:
             save_to_json_file(data_with_timestamp)
+            print('saved', data_with_timestamp)
+            if should_run:
+                socketio.emit('graph_update', data_with_timestamp, namespace='/client')
 
 def read_serial():
     try:
@@ -56,13 +58,6 @@ def read_serial():
                 print('JSON parsing error', e)
     except serial.SerialException as e:
         print(f"Serial communication error: {e}")
-
-def send_recent_data():
-    while should_run:
-        socketio.sleep(1)
-        data_with_timestamp = read_serial()
-        if data_with_timestamp:
-            socketio.emit('graph_update', data_with_timestamp, namespace='/client')
 
 # add timestamps to the received message
 def add_timestamp(data):
@@ -118,7 +113,6 @@ def client_disconnect():
 def update_graph():
     global should_run
     should_run = True
-    socketio.start_background_task(target=send_recent_data)
 
 @socketio.on('graph_update_stop', namespace='/client')
 def halt_update():
@@ -137,5 +131,5 @@ def index():
     return "Server is running!"
 
 if __name__ == '__main__':
-    socketio.start_background_task(target=save_to_json_background_task)
+    socketio.start_background_task(target=save_and_send_data_background_task)
     socketio.run(app, host='0.0.0.0', port=5000)

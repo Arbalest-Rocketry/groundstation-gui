@@ -2,13 +2,21 @@ import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Brush } from 'recharts';
 
 const Chart = ({ data, dataKey }) => {
-    console.log(data[dataKey]);
+    console.log("Data: ", data);
 
     const getYDomain = (data) => {
         if (data.length === 0) {
             return [0, 1]; // default (with no value)
         }
-        const yValues = data.map(point => parseFloat(point[dataKey].toFixed(2))); // round to 2 decimal points
+        const yValues = data.map(point => {
+            const value = parseFloat(point[dataKey]);
+            if (isNaN(value)) {
+                console.error(`Invalid value for dataKey "${dataKey}":`, point[dataKey]);
+                return 0; // or handle as needed
+            }
+            return value.toFixed(2);
+        }).filter(value => !isNaN(value)); // filter out non-numeric values
+
         const minY = Math.min(...yValues);
         const maxY = Math.max(...yValues);
         const buffer = (maxY - minY) * 0.1; // add buffer

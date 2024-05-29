@@ -18,7 +18,7 @@ const Navbar = () => {
       </div>
       <div className="list-group list-group-flush">
         <Link className="list-group-item list-group-item-action list-group-item-light p-3" to="/">Home</Link>
-        <Link className="list-group-item list-group-item-action list-group-item-light p-3" to="/realTimeChart">Real-Time-Chart</Link>
+        <Link className="list-group-item list-group-item-action list-group-item-light p-3" to="/Telemetry">Telemetry</Link>
         
         <button className='list-group-item list-group-item-action list-group-item-light p-3'
           onClick={handleRepo}

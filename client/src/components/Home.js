@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 const Home = () => {
   const items = [
     { id: '', name: 'home' },
-    { id: 'realTimeChart', name: 'Real-time graph' },
+    { id: 'Telemetry', name: 'Telemetry' },
     { id: 'analysis', name: 'Analysis' }
   ];
 

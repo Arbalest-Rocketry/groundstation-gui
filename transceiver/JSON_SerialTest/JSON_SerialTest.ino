@@ -35,26 +35,33 @@ void setup() {
 
 void loop() {
   unsigned long currentTime = millis();
-     uint8_t bufReceived[RH_RF95_MAX_MESSAGE_LEN];
-      uint8_t len = sizeof(bufReceived); // Length of received data
+  uint8_t bufReceived[RH_RF95_MAX_MESSAGE_LEN];
+  uint8_t len = sizeof(bufReceived); // Length of received data
 
   int randomAlt = random(0, 1000);
   int randomPress = random(0, 500);
   int randomTemp = random(0, 40);
+  float randomqr = random(-1000, 1000) / 1000.0;
+  float randomqi = random(-1000, 1000) / 1000.0;
+  float randomqj = random(-1000, 1000) / 1000.0;
+  float randomqk = random(-1000, 1000) / 1000.0;
 
-      // Parse received JSON
-      StaticJsonDocument<200> jsonDoc;
-    // Serialize data into JSON format and send via serial
+  // Parse received JSON
+  StaticJsonDocument<200> jsonDoc;
+  // Serialize data into JSON format and send via serial
 
-    char jsonBuffer[200];
-    jsonDoc["altitude"] = randomAlt;
-    jsonDoc["pressure"] = randomPress;
-    jsonDoc["temperature"] = randomTemp;
-    serializeJson(jsonDoc, jsonBuffer);
-    Serial.write(jsonBuffer);
-    Serial.write('\n');
+  char jsonBuffer[200];
+  jsonDoc["altitude"] = randomAlt;
+  jsonDoc["pressure"] = randomPress;
+  jsonDoc["temperature"] = randomTemp;
+  jsonDoc["q_r"] = randomqr;
+  jsonDoc["q_i"] = randomqi;
+  jsonDoc["q_j"] = randomqj;
+  jsonDoc["q_k"] = randomqk;
+
+  serializeJson(jsonDoc, jsonBuffer);
+  Serial.write(jsonBuffer);
+  Serial.write('\n');
   
-  
-  
-  delay(1000); // Delay for 1 second between data sends
+  delay(100); // Delay for 1 second between data sends
 }
