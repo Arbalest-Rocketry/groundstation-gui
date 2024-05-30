@@ -1,7 +1,7 @@
 # Ground-Station-GUI
 <div style="display: flex; flex-direction: row;">
     
-![image](realTimeChart.png)
+![image](TelemetryImage.png)
 
 # Root of the folder
 ```
@@ -64,7 +64,7 @@ source venv/Scripts/activate
 #### Install the dependencies:
 
 ```
-pip install -r dependencies.txt
+bash setup.sh
 ```
 
 #### Run the server:
