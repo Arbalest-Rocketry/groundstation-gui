@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import RealTimeChart from './RealTimeChart.js';
+import Telemetry from './Telemetry.js';
 
 
 import { Link } from 'react-router-dom';

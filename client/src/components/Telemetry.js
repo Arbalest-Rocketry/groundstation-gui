@@ -165,7 +165,7 @@ const Telemetry = () => {
               <ambientLight intensity={0.5} />
               <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
               <pointLight position={[-10, -10, -10]} />
-              <Box quaternionData={quaternion} position={[0, 0, 0]} />
+              <Box quaternionData={quaternion} position={[-5, 0, 0]} />
             </Canvas>
           </div>
         )}
