@@ -1,0 +1,65 @@
+.Home {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 100vh;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to bottom, #ffffff, #7e7e7e);
+  }
+  .Home .logo {
+    width: 50%;
+    filter: drop-shadow(0 0 0.5rem #3f3c3c);
+  }
+  .Home h1 {
+    color: white;
+    margin: 30px 0;
+  }
+  .Home input {
+    display: block;
+    padding: 10px 20px;
+    margin: 15px 0;
+    width: 100%;
+    max-width: 300px;
+    border: 0;
+    border-radius: 6px;
+    outline-color: red;
+  }
+
+  .input-group {
+    max-width: 600px;
+    width: 100%;
+    margin: 20px 0;
+  }
+  .custom-margin-top {
+    margin-top: 0%; /* Adjust this value as needed */
+  }
+  .Home .btn {
+    width: 100%;
+    max-width: 200px;
+    margin: 1%;
+    box-shadow: 2px 2px 3px rgb(10, 10, 10);
+  }
+  .logos img {
+    width: 80px;
+    margin: 20px;
+  }
+  .Home .upper {
+    flex: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .Home .logos {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 500px;
+    margin: auto;
+  }
+  

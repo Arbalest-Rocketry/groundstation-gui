@@ -6,8 +6,10 @@ const SocketContext = createContext();
 export const useSocketContext = () => useContext(SocketContext);
 
 export const SocketProvider = ({ children }) => {
+  const [serverIp, setServerIp] = useState('');
   const [socket, setSocket] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const handleConnect = useCallback(() => {
     console.log('connected to socket.io server');
@@ -24,19 +26,6 @@ export const SocketProvider = ({ children }) => {
     setIsConnected(false);
   }, []);
 
-  useEffect(() => {
-    if (socket) {
-      socket.on('connect', handleConnect);
-      socket.on('disconnect', handleDisconnect);
-      socket.on('connect_error', handleError);
-
-      return () => {
-        socket.off('connect', handleConnect);
-        socket.off('disconnect', handleDisconnect);
-        socket.off('connect_error', handleError);
-      };
-    }
-  }, [socket, handleConnect, handleDisconnect, handleError]);
 
   const connectToServer = useCallback((serverIp, defaultPort = '5000') => {
     if (socket) {
@@ -52,11 +41,68 @@ export const SocketProvider = ({ children }) => {
     setIsConnected(true);
   }, [socket]);
 
+  const handleIpChange = useCallback((e) => {
+    setServerIp(e.target.value);
+  }, []);
+
+  /**
+   * 
+   */
+  const toggleConnection = useCallback(() => {
+    if (isConnected) {
+      if (socket) {
+        socket.disconnect();
+        socket.close();
+      }
+    } else {
+      connectToServer(serverIp);
+    }
+  }, [isConnected, socket, serverIp, connectToServer]);
+
+/**
+ * ready for socket connection when the app is launched
+ */
+  useEffect(() => {
+    if (socket) {
+      socket.on('connect', handleConnect);
+      socket.on('disconnect', handleDisconnect);
+      socket.on('connect_error', handleError);
+
+      return () => {
+        socket.off('connect', handleConnect);
+        socket.off('disconnect', handleDisconnect);
+        socket.off('connect_error', handleError);
+      };
+    }
+  }, [socket, handleConnect, handleDisconnect, handleError]);
+
+  /**
+   * request graph update when isUpdating is true
+   */
+  useEffect(() => {
+    if (isConnected && socket) {
+      if (isUpdating) {
+        socket.emit('graph_update_request');
+      } else {
+        socket.emit('graph_update_stop');
+      }
+    }
+  }, [isUpdating]);
+
+  const toggleUpdate = useCallback(() => {
+    setIsUpdating((prevUpdating) => !prevUpdating);
+  }, []);
+
   const value = {
     socket,
     isConnected,
     connectToServer,
-    setIsConnected
+    serverIp,
+    setServerIp,
+    toggleUpdate,
+    handleIpChange,
+    toggleConnection,
+    isUpdating
   };
 
   return (

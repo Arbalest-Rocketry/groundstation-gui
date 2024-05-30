@@ -1,20 +1,31 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { useSocketContext } from '../SocketContext';
-import Chart from './Chart.js';
+import { useSocketContext } from '../SocketContext.js';
+import Chart from '../components/Chart.js';
 import '../css/Telemetry.css';
 
-import Box from '../Box';
+import Dropdown from '../components/DropDownMenu.js'
+
+import Box from '../Box.js';
 import { Canvas } from '@react-three/fiber';
 
 const Telemetry = () => {
-  const [serverIp, setServerIp] = useState('');
-  const [isUpdating, setIsUpdating] = useState(false);
   const [data, setData] = useState([]);
   const [keys, setKeys] = useState([]);
   const [quaternion, setQuaternion] = useState({ q_r: 1, q_i: 1, q_j: 1, q_k: 1 });
   const [highlightedKey, setHighlightedKey] = useState(null);
-  const { socket, isConnected, connectToServer } = useSocketContext();
+  const {
+    socket,
+    isConnected,
+    connectToServer,
+    serverIp,
+    setServerIp,
+    toggleUpdate,
+    handleIpChange,
+    toggleConnection,
+    isUpdating
+  } = useSocketContext();
   const chartRefs = useRef({});
+
 
   const handleChartClick = useCallback((key) => {
     setHighlightedKey(key);
@@ -48,24 +59,6 @@ const Telemetry = () => {
     }
   }, []);
 
-//   // Generatae random quanternion data
-//   const generateRandomQuaternion = () => {
-//     return {
-//       qr: Math.random() * 2 - 1,
-//       qi: Math.random() * 2 - 1,
-//       qj: Math.random() * 2 - 1,
-//       qk: Math.random() * 2 - 1,
-//     };
-//   };
-
-//   useEffect(() => {
-//     const interval = setInterval(() => {
-//       setQuaternion(generateRandomQuaternion());
-//     }, 1000); // generate every 1second
-
-//     return () => clearInterval(interval); // clear Interval when the component is unmounted
-//   }, []);
-
   useEffect(() => {
     if (socket) {
       socket.on('graph_update', handleGraphUpdate);
@@ -76,9 +69,6 @@ const Telemetry = () => {
     }
   }, [socket, handleGraphUpdate]);
 
-  const handleIpChange = useCallback((e) => {
-    setServerIp(e.target.value);
-  }, []);
 
   const scrollToChart = useCallback((key) => {
     if (chartRefs.current[key]) {
@@ -93,30 +83,8 @@ const Telemetry = () => {
     }
   }, []);
 
-  const toggleConnection = useCallback(() => {
-    if (isConnected) {
-      if (socket) {
-        socket.disconnect();
-        socket.close();
-      }
-    } else {
-      connectToServer(serverIp);
-    }
-  }, [isConnected, socket, serverIp, connectToServer]);
 
-  const toggleUpdate = useCallback(() => {
-    setIsUpdating((prevUpdating) => !prevUpdating);
-  }, []);
 
-  useEffect(() => {
-    if (isConnected && socket) {
-      if (isUpdating) {
-        socket.emit('graph_update_request');
-      } else {
-        socket.emit('graph_update_stop');
-      }
-    }
-  }, [isConnected, socket, isUpdating]);
 
   const renderedKeys = useMemo(() => keys.map((key, index) => (
     <div
@@ -131,19 +99,15 @@ const Telemetry = () => {
   )), [keys, data, handleChartClick, highlightedKey]);
 
   return (
+    <>
+    <Dropdown/>
+    <div className='Home'>
+
     <div onClick={handleContainerClick}>
       <h1>Real-time Data Chart</h1>
       <p>Status: {isConnected ? 'Connected' : 'Disconnected'}</p>
       <div>
-        <input
-          type="text"
-          value={serverIp}
-          onChange={handleIpChange}
-          placeholder="Enter server IP"
-        />
-        <button className="ip-connection-button" onClick={toggleConnection}>
-          {isConnected ? 'Disconnect' : 'Connect'}
-        </button>
+
         {isConnected && (
           <button className="update-button" onClick={toggleUpdate}>
             {isUpdating ? 'Stop Updates' : 'Start Updates'}
@@ -165,12 +129,14 @@ const Telemetry = () => {
               <ambientLight intensity={0.5} />
               <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
               <pointLight position={[-10, -10, -10]} />
-              <Box quaternionData={quaternion} position={[-5, 0, 0]} />
+              <Box quaternionData={quaternion} position={[0, 0, 0]} />
             </Canvas>
           </div>
         )}
       </div>
     </div>
+    </div>
+</>
   );
 };
 
