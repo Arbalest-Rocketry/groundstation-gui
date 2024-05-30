@@ -1,7 +1,7 @@
 # Ground-Station-GUI
 <div style="display: flex; flex-direction: row;">
     
-![image](.png)
+![image](TelemetryImage.png)
 
 # Root of the folder
 ```
