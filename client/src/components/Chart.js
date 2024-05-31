@@ -32,13 +32,15 @@ const Chart = ({ data, dataKey }) => {
 
     return (
         <LineChart
-            width={600} // width of chart
+
+            width= {700}
             height={450} // height of chart
             data={data} // data to be passed to the chart
-            margin={{ top: 10, right: 30, left: 20, bottom: 80 }} // increased bottom margin
+            position={'relative'}
+            margin={{ top: 10, right: 0, left: 20, bottom: 80 }} // increased bottom margin
         >
             <CartesianGrid strokeDasharray="3 3" /> {/* set the grid style */}
-            <XAxis dataKey="x" label={{ value: 'Time', position: 'insideBottomRight', offset: -10 }} /> {/* x-axis setup with offset */}
+            <XAxis dataKey="x" label={{ value: 'Time', position: 'insideBottomLeft', offset: -15 }} /> {/* x-axis setup with offset */}
             <YAxis
                 domain={yDomain} // set the y domain
                 label={{ value: 'Value', angle: -90, position: 'insideLeft', offset: -10 }}

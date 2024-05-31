@@ -1,0 +1,36 @@
+/* RealTimeChart.css */
+
+.chart-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 10px;
+  }
+  
+  .chart-container > div {
+    min-width: 0px; 
+    margin: 10px;
+    border: 1px solid transparent; 
+    transition: border-color 0.3s; }
+  
+  .chart-container > div.highlighted {
+    border: 2px solid green; /* set the highlighted chart color to green */
+  }
+  
+  .chart-links {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .chart-links button{
+    margin-right: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  .ip-connection-button{
+    margin-left: 10px;
+  }
+  @media (max-width: 1200px) {
+    .chart-container {
+      grid-template-columns: repeat(1, 1fr); /*set to1 column */
+    }
+  }
