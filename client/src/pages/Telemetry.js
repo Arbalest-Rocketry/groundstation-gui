@@ -2,9 +2,7 @@ import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { useSocketContext } from '../SocketContext.js';
 import Chart from '../components/Chart.js';
 import '../css/Telemetry.css';
-
-import Dropdown from '../components/DropDownMenu.js'
-
+import Dropdown from '../components/DropDownMenu.js';
 import Box from '../Box.js';
 import { Canvas } from '@react-three/fiber';
 
@@ -16,16 +14,12 @@ const Telemetry = () => {
   const {
     socket,
     isConnected,
-    connectToServer,
-    serverIp,
-    setServerIp,
     toggleUpdate,
     handleIpChange,
     toggleConnection,
     isUpdating
   } = useSocketContext();
   const chartRefs = useRef({});
-
 
   const handleChartClick = useCallback((key) => {
     setHighlightedKey(key);
@@ -48,8 +42,8 @@ const Telemetry = () => {
 
     if (message.q_r !== undefined 
         && message.q_i !== undefined
-         && message.q_j !== undefined
-          && message.q_k !== undefined) {
+        && message.q_j !== undefined
+        && message.q_k !== undefined) {
       setQuaternion({
         q_r: message.q_r,
         q_i: message.q_i,
@@ -69,7 +63,6 @@ const Telemetry = () => {
     }
   }, [socket, handleGraphUpdate]);
 
-
   const scrollToChart = useCallback((key) => {
     if (chartRefs.current[key]) {
       chartRefs.current[key].scrollIntoView({ behavior: 'smooth' });
@@ -82,9 +75,6 @@ const Telemetry = () => {
       setHighlightedKey(null);
     }
   }, []);
-
-
-
 
   const renderedKeys = useMemo(() => keys.map((key, index) => (
     <div
@@ -100,43 +90,41 @@ const Telemetry = () => {
 
   return (
     <>
-    <Dropdown/>
-    <div className='Home'>
-
-    <div onClick={handleContainerClick}>
-      <h1>Real-time Data Chart</h1>
-      <p>Status: {isConnected ? 'Connected' : 'Disconnected'}</p>
-      <div>
-
-        {isConnected && (
-          <button className="update-button" onClick={toggleUpdate}>
-            {isUpdating ? 'Stop Updates' : 'Start Updates'}
-          </button>
-        )}
-      </div>
-      <div className="chart-links">
-        {keys.map((key) => (
-          <button key={key} onClick={() => scrollToChart(key)}>
-            {key}
-          </button>
-        ))}
-      </div>
-      <div className="chart-container" style={{ position: 'relative' }}>
-        {renderedKeys}
-        {keys.length > 0 && (
-          <div style={{ height: '400px', position: 'relative', marginTop: '20px' }}>
-            <Canvas style={{ position: 'relative', width: '100%', height: '100%', zIndex: 0 }}>
-              <ambientLight intensity={0.5} />
-              <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-              <pointLight position={[-10, -10, -10]} />
-              <Box quaternionData={quaternion} position={[0, 0, 0]} />
-            </Canvas>
+      <Dropdown/>
+      <div className='Home'>
+        <div onClick={handleContainerClick}>
+          <h1>Real-time Data Chart</h1>
+          <p>Status: {isConnected ? 'Connected' : 'Disconnected'}</p>
+          <div>
+            {isConnected && (
+              <button className="update-button" onClick={toggleUpdate}>
+                {isUpdating ? 'Stop Updates' : 'Start Updates'}
+              </button>
+            )}
           </div>
-        )}
+          <div className="chart-links">
+            {keys.map((key) => (
+              <button key={key} onClick={() => scrollToChart(key)}>
+                {key}
+              </button>
+            ))}
+          </div>
+          <div className="chart-container" style={{ position: 'relative' }}>
+            {renderedKeys}
+            {keys.length > 0 && (
+              <div style={{ height: '400px', position: 'relative', marginTop: '20px' }}>
+                <Canvas style={{ position: 'relative', width: '100%', height: '100%', zIndex: 0 }}>
+                  <ambientLight intensity={0.5} />
+                  <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
+                  <pointLight position={[-10, -10, -10]} />
+                  <Box quaternionData={quaternion} position={[0, 0, 0]} />
+                </Canvas>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
-    </div>
-    </div>
-</>
+    </>
   );
 };
 

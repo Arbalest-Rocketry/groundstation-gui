@@ -3,20 +3,15 @@ import logo from '../assets/AB_logo.png';
 import { useNavigate } from "react-router-dom";
 import { useSocketContext } from '../SocketContext.js';
 import '../css/Home.css';
-import { Link } from 'react-router-dom';
+
 
 export default function Home() {
   const navigate = useNavigate();
   const {
-    socket,
     isConnected,
-    connectToServer,
     serverIp,
-    setServerIp,
-    toggleUpdate,
     handleIpChange,
     toggleConnection,
-    isUpdating
   } = useSocketContext();
 
   const items = [
@@ -29,7 +24,7 @@ export default function Home() {
       <div className='upper'>
         <img className='logo' src={logo} />
         <h1>Arbalest Rocketry Ground Station</h1>
-        <div className="input-group mb-3">
+
           <input
             type="text"
             className="form-control custom-margin-top"
@@ -47,7 +42,6 @@ export default function Home() {
           >
             {isConnected ? 'Disconnect' : 'Connect'}
           </button>
-        </div>
         {items.map((item) => (
           <button
             key={item.id}

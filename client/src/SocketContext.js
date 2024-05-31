@@ -26,11 +26,11 @@ export const SocketProvider = ({ children }) => {
     setIsConnected(false);
   }, []);
 
-
   const connectToServer = useCallback((serverIp, defaultPort = '5000') => {
     if (socket) {
       socket.disconnect();
       socket.close();
+      
     }
     const serverUrl = `http://${serverIp}:${defaultPort}/client`;
     const newSocket = io(serverUrl, {
@@ -45,23 +45,18 @@ export const SocketProvider = ({ children }) => {
     setServerIp(e.target.value);
   }, []);
 
-  /**
-   * 
-   */
   const toggleConnection = useCallback(() => {
     if (isConnected) {
       if (socket) {
         socket.disconnect();
         socket.close();
+        setIsConnected(false);
       }
     } else {
       connectToServer(serverIp);
     }
   }, [isConnected, socket, serverIp, connectToServer]);
 
-/**
- * ready for socket connection when the app is launched
- */
   useEffect(() => {
     if (socket) {
       socket.on('connect', handleConnect);
@@ -76,9 +71,6 @@ export const SocketProvider = ({ children }) => {
     }
   }, [socket, handleConnect, handleDisconnect, handleError]);
 
-  /**
-   * request graph update when isUpdating is true
-   */
   useEffect(() => {
     if (isConnected && socket) {
       if (isUpdating) {
@@ -87,7 +79,7 @@ export const SocketProvider = ({ children }) => {
         socket.emit('graph_update_stop');
       }
     }
-  }, [isUpdating]);
+  }, [isUpdating, isConnected, socket]);
 
   const toggleUpdate = useCallback(() => {
     setIsUpdating((prevUpdating) => !prevUpdating);

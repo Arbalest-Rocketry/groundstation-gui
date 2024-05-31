@@ -3,6 +3,9 @@
     padding: 0;
     box-sizing: border-box;
   }
+  .navbar-nav{
+    margin-right: 0%;
+  }
   
   .dropdown-container {
     width: 100%;
@@ -10,7 +13,7 @@
     border-bottom: 2px solid white;
     display: flex;
     align-items: center;
-    justify-content: space-between; 
+    /* justify-content: space-between;  */
     /* background-color: white; */
     box-shadow: 2px 2px 3px rgb(67, 66, 66);
     background: linear-gradient(to bottom, #353434, #5a5a5a);
@@ -38,7 +41,12 @@
     border-color: #444;
     color: #fff;
   }
-  
+  .navbar-collapse {
+    width: auto; /* width를 자동으로 조정 */
+    padding: 0; /* 필요에 따라 padding 조정 */
+    margin: 0; /* 필요에 따라 margin 조정 */
+}
+
   img {
     vertical-align: middle;
     border-style: none;
