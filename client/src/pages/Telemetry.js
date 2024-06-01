@@ -1,7 +1,8 @@
 import React from 'react';
 import '../css/Telemetry.css';
 import Dropdown from '../components/DropDownMenu.js';
-import RealTimeChart from  '../components/RealTimeChart.js'
+import RealTimeChart from  '../components/RealTimeChart.js';
+import Map from  '../components/Map.js'
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import DataSearch from '../components/DataSearch.js';
@@ -27,6 +28,11 @@ export default function Telemetry(){
             <Tab tabClassName="tab" eventKey="BNO" title="BNO">
               <div className="wrapper">
     <RealTimeChart/>
+              </div>
+            </Tab>
+            <Tab tabClassName="tab" eventKey="GPs" title="GPS">
+              <div className="wrapper">
+    <Map/>
               </div>
             </Tab>
       </Tabs>
