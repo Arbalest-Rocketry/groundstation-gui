@@ -1,41 +1,50 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import '../css/Telemetry.css';
 import Dropdown from '../components/DropDownMenu.js';
-import RealTimeChart from  '../components/RealTimeChart.js';
-import Map from  '../components/Map.js'
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
-import DataSearch from '../components/DataSearch.js';
 
+const RealTimeChart = lazy(() => import('../components/RealTimeChart.js'));
+const Map = lazy(() => import('../components/Map.js'));
+const DataSearch = lazy(() => import('../components/DataSearch.js'));
 
-export default function Telemetry(){
-
+export default function Telemetry() {
   return (
     <>
-      <Dropdown/>
+      <Dropdown />
       <Tabs defaultActiveKey="controls" className="mb-3">
-            <Tab tabClassName="tab" eventKey="controls" title="Telemetry">
-              <div className="wrapper">
-    <RealTimeChart/>
-              </div>
-            </Tab>
+        <Tab tabClassName="tab" eventKey="controls" title="Telemetry">
+          <div className="wrapper">
+            <Suspense fallback={<div>Loading...</div>}>
+              <RealTimeChart />
+            </Suspense>
+          </div>
+        </Tab>
 
-            <Tab tabClassName="tab" eventKey="DataSearch" title="dataSearch">
-              <div className="wrapper">
-    <DataSearch/>
-              </div>
-            </Tab>
-            <Tab tabClassName="tab" eventKey="BNO" title="BNO">
-              <div className="wrapper">
-    <RealTimeChart/>
-              </div>
-            </Tab>
-            <Tab tabClassName="tab" eventKey="GPs" title="GPS">
-              <div className="wrapper">
-    <Map/>
-              </div>
-            </Tab>
+        <Tab tabClassName="tab" eventKey="DataSearch" title="dataSearch">
+          <div className="wrapper">
+            <Suspense fallback={<div>Loading...</div>}>
+              <DataSearch />
+            </Suspense>
+          </div>
+        </Tab>
+        
+        <Tab tabClassName="tab" eventKey="BNO" title="BNO">
+          <div className="wrapper">
+            <Suspense fallback={<div>Loading...</div>}>
+              <RealTimeChart />
+            </Suspense>
+          </div>
+        </Tab>
+        
+        <Tab tabClassName="tab" eventKey="GPS" title="GPS">
+          <div className="wrapper">
+            <Suspense fallback={<div>Loading...</div>}>
+              <Map />
+            </Suspense>
+          </div>
+        </Tab>
       </Tabs>
     </>
   );
-};
+}
