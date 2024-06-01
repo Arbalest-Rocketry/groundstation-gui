@@ -42,9 +42,9 @@
     color: #fff;
   }
   .navbar-collapse {
-    width: auto; /* width를 자동으로 조정 */
-    padding: 0; /* 필요에 따라 padding 조정 */
-    margin: 0; /* 필요에 따라 margin 조정 */
+    width: auto; 
+    padding: 0;
+    margin: 0; 
 }
 
   img {
