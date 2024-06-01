@@ -30,7 +30,7 @@ export const SocketProvider = ({ children }) => {
     if (socket) {
       socket.disconnect();
       socket.close();
-      
+      setIsConnected(false);
     }
     const serverUrl = `http://${serverIp}:${defaultPort}/client`;
     const newSocket = io(serverUrl, {

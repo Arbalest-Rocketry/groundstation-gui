@@ -3,17 +3,23 @@ import Chart from './Chart.js';
 import { Canvas } from '@react-three/fiber';
 import Box from '../Box.js';
 import  '../css/ChartOverview.css';
+import { useSocketContext } from '../SocketContext.js';
+
+
+
 
 export default function ChartOverview({
   keys = [],
   data = [],
-  isConnected = false,
-  toggleUpdate = () => {},
-  isUpdating = false,
   quaternion = { q_r: 1, q_i: 1, q_j: 1, q_k: 1 }
 }) {
   const [highlightedKey, setHighlightedKey] = useState(null);
   const chartRefs = useRef({});
+  const {
+    isConnected,
+    isUpdating,
+    toggleUpdate
+  } = useSocketContext();
 
   const handleChartClick = useCallback((key) => {
     setHighlightedKey(key);
@@ -37,10 +43,10 @@ export default function ChartOverview({
       key={index}
       ref={(el) => (chartRefs.current[key] = el)}
       onClick={() => handleChartClick(key)}
-      className={highlightedKey === key ? 'highlighted' : ''}
-      style={{ marginBottom: '20px', width: '100%', position: 'relative', zIndex: 1 }}
+      className={`${highlightedKey === key ? 'highlighted' : ''} container-fluid`}
+      style={{ marginBottom: '20px', marginRight: '10%', marginLeft: '10%', width: '100%', position: 'relative', zIndex: 1 }}
     >
-      <Chart data={data} dataKey={key} />
+      <Chart data={data} dataKey={key} readDates = {false} />
     </div>
   )), [keys, data, handleChartClick, highlightedKey]);
 

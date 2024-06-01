@@ -6,10 +6,12 @@ import serial
 import serial.tools.list_ports
 from datetime import datetime
 import os
+from dateutil import parser
 
 # Serial port setup
 BAUD_RATE = 9600
 socketSleep = 0.1
+
 # Find serial port
 def find_serial_port():
     ports = serial.tools.list_ports.comports()
@@ -21,7 +23,6 @@ def find_serial_port():
 
 SERIAL_PORT = find_serial_port()
 ser = None
-# check if the serial connection available
 if SERIAL_PORT:
     try:
         ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
@@ -68,14 +69,14 @@ def add_timestamp(data):
 def save_to_json_file(data):
     file_path = os.path.join(os.path.dirname(__file__), 'received_message.json')
     try:
-        if os.path.exists(file_path):  # if the file exists
-            with open(file_path, 'r+') as file:  # append the received data to the existing data
+        if os.path.exists(file_path):
+            with open(file_path, 'r+') as file:
                 try:
                     file_data = json.load(file)
                 except json.JSONDecodeError:
                     file_data = []
                 file_data.append(data)
-                file.seek(0)  # set the start
+                file.seek(0)
                 json.dump(file_data, file, indent=2)
         else:
             with open(file_path, 'w') as file:
@@ -90,9 +91,9 @@ def read_from_json_file(start=None, end=None):
             with open(file_path, 'r') as file:
                 file_data = json.load(file)
                 if start and end:
-                    start_dt = datetime.fromisoformat(start)
-                    end_dt = datetime.fromisoformat(end)
-                    filtered_data = [entry for entry in file_data if start_dt <= datetime.fromisoformat(entry['timestamp']) <= end_dt]
+                    start_dt = parser.isoparse(start).replace(tzinfo=None)
+                    end_dt = parser.isoparse(end).replace(tzinfo=None)
+                    filtered_data = [entry for entry in file_data if start_dt <= parser.isoparse(entry['timestamp']).replace(tzinfo=None) <= end_dt]
                     return filtered_data
                 return file_data
         else:
@@ -123,8 +124,11 @@ def halt_update():
 def request_data_by_range(message):
     start = message.get('start')
     end = message.get('end')
+    attribute = message.get('attribute')
+    chart_id = message.get('chartId')
     data = read_from_json_file(start, end)
-    emit('data_in_range', data, namespace='/client')
+    filtered_data = [{'timestamp': entry['timestamp'], attribute: entry[attribute]} for entry in data if attribute in entry]
+    emit('data_in_range', {'chartId': chart_id, 'data': filtered_data, 'attribute': attribute, 'date': start.split('T')[0]}, namespace='/client')
 
 @app.route('/')
 def index():

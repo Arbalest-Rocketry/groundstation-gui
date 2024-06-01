@@ -1,13 +1,10 @@
-import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { useSocketContext } from '../SocketContext.js';
-import Chart from '../components/Chart.js';
+import React from 'react';
 import '../css/Telemetry.css';
 import Dropdown from '../components/DropDownMenu.js';
-import Box from '../Box.js';
-import RealTimeChart from  './RealTimeChart.js'
-import { Canvas } from '@react-three/fiber';
+import RealTimeChart from  '../components/RealTimeChart.js'
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
+import DataSearch from '../components/DataSearch.js';
 
 
 export default function Telemetry(){
@@ -22,7 +19,12 @@ export default function Telemetry(){
               </div>
             </Tab>
 
-            <Tab tabClassName="tab" eventKey="telemetry2" title="Telemetry2">
+            <Tab tabClassName="tab" eventKey="DataSearch" title="dataSearch">
+              <div className="wrapper">
+    <DataSearch/>
+              </div>
+            </Tab>
+            <Tab tabClassName="tab" eventKey="BNO" title="BNO">
               <div className="wrapper">
     <RealTimeChart/>
               </div>
