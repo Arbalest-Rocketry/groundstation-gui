@@ -6,12 +6,7 @@
     gap: 10px;
   }
   
-  .chart-container > div {
-    min-width: 0px; 
-    margin: 10px;
-    border: 1px solid transparent; 
-    transition: border-color 0.3s; }
-  
+
   .chart-container > div.highlighted {
     border: 2px solid green; /* set the highlighted chart color to green */
   }
