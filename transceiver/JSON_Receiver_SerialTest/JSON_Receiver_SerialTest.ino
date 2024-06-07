@@ -10,9 +10,6 @@
 
 RH_RF95 rf95(RFM95_CS, RFM95_INT); // Initialize the LoRa module with the specified pins
 
-unsigned long lastSwitchTime = 0; // Variable to keep track of the last switch time
-const unsigned long switchInterval = 5000; // Interval for switching tasks in milliseconds
-
 void setup() {
   Serial.begin(9600); // Initialize serial communication
   while (!Serial);
@@ -36,27 +33,30 @@ void setup() {
 }
 
 void loop() {
-  unsigned long currentTime = millis();
-
   if (rf95.available()) {
     uint8_t bufReceived[RH_RF95_MAX_MESSAGE_LEN];
     uint8_t len = sizeof(bufReceived); // Length of received data
     if (rf95.recv(bufReceived, &len)) {
-      DynamicJsonDocument jsonDoc(256);
-      DeserializationError error = deserializeJson(jsonDoc, bufReceived, len);
-      
-      if (error) {
-        Serial.print(F("deserializeJson() failed: "));
-        Serial.println(error.c_str());
-      } else {
-        // Create a JSON string to send over Serial
-        String jsonString;
-        serializeJson(jsonDoc, jsonString);
-        Serial.write(jsonString.c_str(), jsonString.length());
-        Serial.write('\n'); // Add a newline character for better readability
-      }
+      String receivedData = String((char*)bufReceived, len);
 
-//      delay(1000); // Delay for 1 second between data sends
+      if (receivedData.startsWith("JSON_START")) {
+        String jsonData = receivedData.substring(strlen("JSON_START"));
+        DynamicJsonDocument jsonDoc(256);
+        DeserializationError error = deserializeJson(jsonDoc, jsonData);
+        if (error) {
+          Serial.print(F("deserializeJson() failed: "));
+          Serial.println(error.c_str());
+        } else {
+          // Create a JSON string to send over Serial
+          String jsonString;
+          serializeJson(jsonDoc, jsonString);
+          Serial.write(jsonString.c_str(), jsonString.length());
+          Serial.write('\n'); // Add a newline character for better readability
+        }
+      } else if (receivedData.startsWith("VIDEO_START")) {
+        String videoData = receivedData.substring(strlen("VIDEO_START"));
+        Serial.write(videoData.c_str(), videoData.length());
+      }
     }
   }
 }

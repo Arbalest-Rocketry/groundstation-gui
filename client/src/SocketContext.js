@@ -10,22 +10,35 @@ export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
-
+/**
+ * handle connect
+ * set IsConnected to true
+ */
   const handleConnect = useCallback(() => {
     console.log('connected to socket.io server');
     setIsConnected(true);
   }, []);
-
+/**
+ * handle Disconnection
+ * set isConnected to false
+ */
   const handleDisconnect = useCallback(() => {
     console.log('disconnected from socket.io server');
+    setIsUpdating(false);
     setIsConnected(false);
   }, []);
-
-  const handleError = useCallback((error) => {
-    console.error('connection error:', error);
+  /**
+   * handle connection error
+   * if error occurs, set is Connect to false
+  */
+ const handleError = useCallback((error) => {
+   console.error('connection error:', error);
+   setIsUpdating(false);
     setIsConnected(false);
   }, []);
-
+  /**
+   * 
+   */
   const connectToServer = useCallback((serverIp, defaultPort = '5000') => {
     if (socket) {
       socket.disconnect();
