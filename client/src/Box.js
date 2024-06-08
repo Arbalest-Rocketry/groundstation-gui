@@ -10,8 +10,8 @@ const Box = ({ quaternionData, ...props }) => {
   // Subscribe this component to the render-loop, update the mesh rotation based on the quaternion data
   useFrame(() => {
     if (quaternionData) {
-      const { q_r, q_i, q_j, q_k } = quaternionData;
-      const quaternion = new THREE.Quaternion(q_i, q_j, q_k, q_r);
+      const { qi, qj, qk, qr } = quaternionData;
+      const quaternion = new THREE.Quaternion(qi, qj, qk, qr);
       quaternion.normalize(); //set the size consistent
       meshRef.current.quaternion.copy(quaternion);
     }

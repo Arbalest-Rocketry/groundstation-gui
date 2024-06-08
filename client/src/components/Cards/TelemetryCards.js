@@ -45,10 +45,10 @@ function BMP({ latestData }) {
     <Card style={{ width: "100%" }}>
         <Card.Header>BNO</Card.Header>
         <ListGroup>
-            <ListGroup.Item>q_r: {latestData.q_r || 'N/A'}</ListGroup.Item>
-            <ListGroup.Item>q_i: {latestData.q_i || 'N/A'}</ListGroup.Item>
-            <ListGroup.Item>q_j: {latestData.q_j || 'N/A'}</ListGroup.Item>
-            <ListGroup.Item>q_k: {latestData.q_k || 'N/A'}</ListGroup.Item>
+            <ListGroup.Item>q_r: {latestData.qr || 'N/A'}</ListGroup.Item>
+            <ListGroup.Item>q_i: {latestData.qi || 'N/A'}</ListGroup.Item>
+            <ListGroup.Item>q_j: {latestData.qj || 'N/A'}</ListGroup.Item>
+            <ListGroup.Item>q_k: {latestData.qk || 'N/A'}</ListGroup.Item>
         </ListGroup>
     </Card>
     <Card style={{ width: "100%" }}>

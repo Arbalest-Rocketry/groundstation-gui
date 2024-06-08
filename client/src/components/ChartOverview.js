@@ -11,7 +11,7 @@ import { useSocketContext } from '../SocketContext.js';
 export default function ChartOverview({
   keys = [],
   data = [],
-  quaternion = { q_r: 1, q_i: 1, q_j: 1, q_k: 1 }
+  quaternion = { qr: 1, qi: 1, qj: 1, qk: 1 }
 }) {
   const [highlightedKey, setHighlightedKey] = useState(null);
   const chartRefs = useRef({});

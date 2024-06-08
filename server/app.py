@@ -140,23 +140,7 @@ def request_data_by_range(message):
     attribute = message.get('attribute')
     chart_id = message.get('chartId')
     data = read_from_json_file(start, end)
-
-    if attribute:
-        if attribute.startswith('q'):
-            filtered_data = [
-                {'timestamp': entry['timestamp'], **{k: v for k, v in entry.items() if k.startswith('q')}}
-                for entry in data
-                if any(k.startswith('q') for k in entry)
-            ]
-        else:
-            filtered_data = [
-                {'timestamp': entry['timestamp'], attribute: entry[attribute]}
-                for entry in data
-                if attribute in entry
-            ]
-    else:
-        filtered_data = data  # No attribute specified, return all data
-
+    filtered_data = [{'timestamp': entry['timestamp'], attribute: entry[attribute]} for entry in data if attribute in entry]
     emit('data_in_range', {'chartId': chart_id, 'data': filtered_data, 'attribute': attribute, 'date': start.split('T')[0]}, namespace='/client')
 
 @app.route('/')
