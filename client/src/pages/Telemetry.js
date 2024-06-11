@@ -5,7 +5,7 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 
 const RealTimeChart = lazy(() => import('../components/RealTimeChart.js'));
-const Map = lazy(() => import('../components/Map.js'));
+const Maps = lazy(() => import('../components/Maps.js'));
 const DataSearch = lazy(() => import('../components/DataSearch.js'));
 
 export default function Telemetry() {
@@ -40,7 +40,7 @@ export default function Telemetry() {
         <Tab tabClassName="tab" eventKey="GPS" title="GPS">
           <div className="wrapper">
             <Suspense fallback={<div>Loading...</div>}>
-              <Map />
+              <Maps />
             </Suspense>
           </div>
         </Tab>
