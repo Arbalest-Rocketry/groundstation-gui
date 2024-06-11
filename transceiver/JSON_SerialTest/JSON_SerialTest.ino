@@ -54,14 +54,14 @@ void loop() {
   jsonDoc["altitude"] = randomAlt;
   jsonDoc["pressure"] = randomPress;
   jsonDoc["temperature"] = randomTemp;
-  jsonDoc["q_r"] = randomqr;
-  jsonDoc["q_i"] = randomqi;
-  jsonDoc["q_j"] = randomqj;
-  jsonDoc["q_k"] = randomqk;
+  jsonDoc["qr"] = randomqr;
+  jsonDoc["qi"] = randomqi;
+  jsonDoc["qj"] = randomqj;
+  jsonDoc["qk"] = randomqk;
 
   serializeJson(jsonDoc, jsonBuffer);
   Serial.write(jsonBuffer);
   Serial.write('\n');
   
-  delay(100); // Delay for 1 second between data sends
+  delay(300); // Delay for 1 second between data sends
 }

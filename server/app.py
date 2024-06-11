@@ -7,6 +7,7 @@ import serial.tools.list_ports
 from datetime import datetime
 import os
 from dateutil import parser
+import time
 
 # Serial port setup
 BAUD_RATE = 9600
@@ -21,14 +22,19 @@ def find_serial_port():
             return port.device
     return None
 
-SERIAL_PORT = find_serial_port()
-ser = None
-if SERIAL_PORT:
-    try:
-        ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
-        print(f"Using serial port: {SERIAL_PORT}")
-    except serial.SerialException as e:
-        print(f"Could not open serial port {SERIAL_PORT}: {e}")
+def open_serial_port():
+    SERIAL_PORT = find_serial_port()
+    if SERIAL_PORT:
+        try:
+            ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
+            print(f"Using serial port: {SERIAL_PORT}")
+            return ser
+        except serial.SerialException as e:
+            print(f"Could not open serial port {SERIAL_PORT}: {e}")
+            return None
+    return None
+
+ser = open_serial_port()
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -38,6 +44,7 @@ app.config['SECRET_KEY'] = 'secret!'
 should_run = False  # decide whether to receive data from teensy
 
 def save_and_send_data_background_task():
+    global ser
     while True:
         socketio.sleep(socketSleep)
         data_with_timestamp = read_serial()
@@ -48,6 +55,7 @@ def save_and_send_data_background_task():
                 socketio.emit('graph_update', data_with_timestamp, namespace='/client')
 
 def read_serial():
+    global ser
     try:
         if ser and ser.in_waiting > 0:
             line = ser.readline().decode('utf-8').strip()
@@ -59,6 +67,11 @@ def read_serial():
                 print('JSON parsing error', e)
     except serial.SerialException as e:
         print(f"Serial communication error: {e}")
+        ser.close()
+        ser = None
+        while ser is None:
+            time.sleep(5)
+            ser = open_serial_port()
 
 # add timestamps to the received message
 def add_timestamp(data):
