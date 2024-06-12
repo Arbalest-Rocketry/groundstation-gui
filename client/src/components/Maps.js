@@ -2,6 +2,8 @@ import React from 'react';
 import { Map } from 'react-map-gl';
 import {OrthographicView} from '@deck.gl/core';
 import DeckGL, { GeoJsonLayer } from 'deck.gl';
+import { Canvas } from 'react-three-map/maplibre'
+
 import '../css/Map.css';
 
 const MAPBOX_ACCESS_TOKEN = "pk.eyJ1IjoiYWNyZmFjdG9yeSIsImEiOiJjbHg4eGVkb3YyZnlxMmpvYWV6ZDNuY2MyIn0.leZ1_Go8xIbTMXC8MmDBBw";
@@ -68,18 +70,21 @@ const layers = [
 function Maps() {
   return (
     <div style={{ height: '1000px', width : '100%',position: 'relative', marginTop: '20px' }}>
-      <DeckGL
-        initialViewState={INITIAL_VIEW_STATE}
-        controller={true}
-        layers={layers}
-        style={{ height: '100%', width: '100%', }} 
-        >
+
         <Map
           mapStyle={MAP_STYLE}
           style = {{}}
           mapboxAccessToken={MAPBOX_ACCESS_TOKEN}
-          />
-      </DeckGL>
+          >
+              <Canvas latitude={43.772725} longitude={-79.498628}>
+      <pointLight position={[10, 10, 10]} />
+      <mesh>
+        <sphereGeometry />
+        <meshStandardMaterial color="hotpink" />
+      </mesh>
+      </Canvas>
+
+          </Map>
           </div>
   );
 }

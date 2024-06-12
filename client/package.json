@@ -17,7 +17,9 @@
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.11",
     "deck.gl": "^9.0.17",
+    "geo-three": "^0.1.14",
     "leaflet": "^1.9.4",
+    "leva": "^0.9.35",
     "mapbox-gl": "^3.4.0",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.2",
@@ -29,9 +31,11 @@
     "react-map-gl": "^7.1.7",
     "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",
+    "react-three-map": "^0.8.2",
     "recharts": "^2.12.7",
     "socket.io-client": "^4.7.5",
     "startbootstrap-simple-sidebar": "^6.0.6",
+    "three-geo": "^1.4.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

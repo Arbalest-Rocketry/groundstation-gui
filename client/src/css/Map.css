@@ -17,11 +17,4 @@
     font-size: 1.2rem;
     box-shadow: 0 0 0px 5px #fff;
   }
-  .deckgl-container {
-    position: absolute;
-    top: 50px; /* 원하는 위치로 조정 */
-    left: 50px; /* 원하는 위치로 조정 */
-    width: calc(100% - 100px); /* 너비와 위치 조정에 따라 계산 */
-    height: calc(100% - 100px); /* 높이와 위치 조정에 따라 계산 */
-  }
-  
+
