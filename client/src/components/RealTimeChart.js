@@ -19,7 +19,9 @@ export default function RealTimeChart() {
         toggleUpdate,
         handleIpChange,
         toggleConnection,
-        isUpdating
+        setIsUpdating,
+        setIsConnected,
+
     } = useSocketContext();
     const chartRefs = useRef({});
 
