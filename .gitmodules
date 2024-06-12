@@ -1,0 +1,3 @@
+[submodule "submodules/three-geo"]
+	path = submodules/three-geo
+	url = https://github.com/w3reality/three-geo.git
