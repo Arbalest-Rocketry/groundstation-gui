@@ -21,7 +21,7 @@ export default function RealTimeChart() {
         toggleConnection,
         setIsUpdating,
         setIsConnected,
-        isUpdating
+
     } = useSocketContext();
     const chartRefs = useRef({});
 
