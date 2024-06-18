@@ -5,7 +5,7 @@ import Setting from './components/Setting';
 import Navbar from './components/Navbar';
 import DropdownMenu from './components/DropDownMenu';
 import Telemetry from './pages/Telemetry';
-import Analysis from './components/analysis';
+import Analysis from './pages/analysis';
 
 
 import { SocketProvider } from './SocketContext';
@@ -24,15 +24,8 @@ const App = () => {
     setIsToggled(!isToggled);
   };
 
-
-//   <div className={`d-flex ${isToggled ? 'sb-sidenav-toggled' : ''}`} id="wrapper">
-//   <Navbar />
-//     <DropdownMenu onToggle={handleToggle} />
-
-// </div>
   return (
     <>
-
     <SocketProvider>
       <Router>
         <Routes>

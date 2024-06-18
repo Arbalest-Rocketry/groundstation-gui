@@ -1,12 +1,9 @@
 import React, { useState, useCallback, useMemo, useRef } from 'react';
 import Chart from './Chart.js';
 import { Canvas } from '@react-three/fiber';
-import Box from '../Box.js';
-import  '../css/ChartOverview.css';
+import Rocket from './Rocket.js';
+import '../css/ChartOverview.css';
 import { useSocketContext } from '../SocketContext.js';
-
-
-
 
 export default function ChartOverview({
   keys = [],
@@ -15,11 +12,7 @@ export default function ChartOverview({
 }) {
   const [highlightedKey, setHighlightedKey] = useState(null);
   const chartRefs = useRef({});
-  const {
-    isConnected,
-    isUpdating,
-    toggleUpdate
-  } = useSocketContext();
+  const { isConnected, isUpdating, toggleUpdate } = useSocketContext();
 
   const handleChartClick = useCallback((key) => {
     setHighlightedKey(key);
@@ -46,7 +39,7 @@ export default function ChartOverview({
       className={`${highlightedKey === key ? 'highlighted' : ''} container-fluid`}
       style={{ marginBottom: '20px', marginRight: '10%', marginLeft: '10%', width: '100%', position: 'relative', zIndex: 1 }}
     >
-      <Chart data={data} dataKey={key} readDates = {false} />
+      <Chart data={data} dataKey={key} readDates={false} />
     </div>
   )), [keys, data, handleChartClick, highlightedKey]);
 
@@ -70,16 +63,16 @@ export default function ChartOverview({
       </div>
       <div className="chart-container" style={{ position: 'relative', width: '100%' }}>
         {renderedKeys}
-        {keys.length > 0 && (
+        {/* {keys.length > 0 && (
           <div style={{ height: '400px', position: 'relative', marginTop: '20px' }}>
             <Canvas style={{ position: 'relative', width: '100%', height: '100%', zIndex: 0 }}>
               <ambientLight intensity={0.5} />
               <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
               <pointLight position={[-10, -10, -10]} />
-              <Box quaternionData={quaternion} position={[0, 0, 0]} />
+              <Rocket quaternionData={quaternion} position={[0, 0, 0]} />
             </Canvas>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

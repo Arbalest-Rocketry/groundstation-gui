@@ -27,7 +27,7 @@ const Chart = ({ data, dataKey, readDates }) => {
     const yDomain = getYDomain(data);
 
     const formatYAxis = (tickItem) => {
-        return tickItem.toFixed(2); // format Y-axis labels to 2 decimal places
+        return tickItem.toFixed(3); // format Y-axis labels to 2 decimal places
     };
 
     return (

@@ -12,7 +12,7 @@ RH_RF95 rf95(RFM95_CS, RFM95_INT); // Initialize the LoRa module with the specif
 
 unsigned long lastSwitchTime = 0; // Variable to keep track of the last switch time
 const unsigned long switchInterval = 5000; // Interval for switching tasks in milliseconds
-
+  float longitude = -79.506625;
 void setup() {
   Serial.begin(9600); // Initialize serial communication
   while (!Serial);
@@ -45,20 +45,28 @@ void loop() {
   float randomqi = random(-1000, 1000) / 1000.0;
   float randomqj = random(-1000, 1000) / 1000.0;
   float randomqk = random(-1000, 1000) / 1000.0;
-
+  float latitude = 43.771870;
+//-79.506625
   // Parse received JSON
   StaticJsonDocument<200> jsonDoc;
   // Serialize data into JSON format and send via serial
-
+  float longitudeGoal= -79.415851;
   char jsonBuffer[200];
   jsonDoc["altitude"] = randomAlt;
   jsonDoc["pressure"] = randomPress;
   jsonDoc["temperature"] = randomTemp;
+  jsonDoc["latitude"] = latitude;
+  jsonDoc["longitude"] = longitude;
+  
   jsonDoc["qr"] = randomqr;
   jsonDoc["qi"] = randomqi;
   jsonDoc["qj"] = randomqj;
   jsonDoc["qk"] = randomqk;
-
+  
+  if (longitude != longitudeGoal) {
+    longitude += 0.001;
+  }
+  
   serializeJson(jsonDoc, jsonBuffer);
   Serial.write(jsonBuffer);
   Serial.write('\n');

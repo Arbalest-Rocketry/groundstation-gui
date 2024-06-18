@@ -6,10 +6,11 @@ import Stack from "react-bootstrap/Stack";
 import { useSocketContext } from '../SocketContext.js';
 import {BMP} from './Cards/TelemetryCards.js'
 import Box from '@mui/material/Box';
+import Maps from './Maps.js';
 
 
 
-export default function RealTimeChart() {
+export default function RealTimeChart({ isActive }) {
     const [data, setData] = useState([]);
     const [keys, setKeys] = useState([]);
     const [quaternion, setQuaternion] = useState({ qr: 1, qi: 1, qj: 1, qk: 1 });
@@ -74,15 +75,19 @@ export default function RealTimeChart() {
     return (
         <Stack direction="horizontal" gap={3}>
             <div style={{ display: "flex", flexDirection: "row", width: "100%", height: "100%", justifyContent: "space-between" }}>
-                <BMP latestData = {latestData}/>
+                <BMP latestData = {latestData} quaternion = {quaternion}/>
 
-                <div style={{ display: "flex", width: "100%", flexDirection: "column" }}>
+                <div style={{ display: "flex", width: "60%", flexDirection: "column" }}>
                     <div className="mt-20" style={{ width: "100%", display: "flex", flexDirection: "row" }}>
                         <ChartOverview
                             keys={keys}
                             data={data}
-                            quaternion={quaternion}
                         />
+                    </div>
+                </div>
+                <div style = {{display: 'flex', width: "20%", height: "100vh", flexDirection: "column"}}>
+                    <div className = "mt-20" style={{width: "100%", height: "100%", display: "flex", flexDirection: "row"}}>
+                        <Maps isActive={isActive} quaternionData={quaternion}/>
                     </div>
                 </div>
             </div>
