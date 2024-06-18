@@ -17,6 +17,7 @@
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.11",
     "deck.gl": "^9.0.17",
+    "file-loader": "^6.2.0",
     "geo-three": "^0.1.14",
     "leaflet": "^1.9.4",
     "leva": "^0.9.35",
@@ -36,6 +37,8 @@
     "socket.io-client": "^4.7.5",
     "startbootstrap-simple-sidebar": "^6.0.6",
     "three-geo": "^1.4.5",
+    "threebox": "^0.1.5",
+    "threebox-plugin": "^2.2.7",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
