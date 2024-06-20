@@ -87,7 +87,7 @@ export default function RealTimeChart({ isActive }) {
                 </div>
                 <div style = {{display: 'flex', width: "20%", height: "100vh", flexDirection: "column"}}>
                     <div className = "mt-20" style={{width: "100%", height: "100%", display: "flex", flexDirection: "row"}}>
-                        <Maps isActive={isActive} quaternionData={quaternion}/>
+                        <Maps isActive={isActive} quaternionData={quaternion} latestData={latestData}/>
                     </div>
                 </div>
             </div>

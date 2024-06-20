@@ -73,7 +73,7 @@ export default function Telemetry() {
         </Tab>
 
         <Tab tabClassName="tab" eventKey="GPS3D" title="GPS3D">
-          <div className="wrapper" style={{ height: '100vh', width: 'auto' }}>
+          <div className="wrapper" style={{ position: 'relative', height: '100vh', width: '100vw' }}>
             <Suspense fallback={<div>Loading...</div>}>
               <GeoMap />
             </Suspense>

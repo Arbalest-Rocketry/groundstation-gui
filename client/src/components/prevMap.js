@@ -6,25 +6,16 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiYWNyZmFjdG9yeSIsImEiOiJjbHg4eGVkb3YyZnlxMmpvYWV6ZDNuY2MyIn0.leZ1_Go8xIbTMXC8MmDBBw';
 
-const Map = ({ latestData, isActive }) => {
+const GeoMap = ({ latestData }) => {
   const mapContainer = useRef(null);
   const map = useRef(null);
   const model = useRef(null);
-  const modelTransform = useRef({
-    translateX: 0,
-    translateY: 0,
-    translateZ: 0,
-    rotateX: Math.PI / 2,
-    rotateY: 0,
-    rotateZ: 0,
-    scale: 0,
-  });
 
   useEffect(() => {
     // Default initial coordinates
     let initialLatitude = 43.771865;
     let initialLongitude = -79.506482;
-    let initialAltitude = 1000;
+    let initialAltitude = 0;
 
     // Use coordinates from latestData if available
     if (latestData && !isNaN(latestData.latitude) && !isNaN(latestData.longitude) && !isNaN(latestData.altitude)) {
@@ -51,7 +42,7 @@ const Map = ({ latestData, isActive }) => {
       initialAltitude
     );
 
-    modelTransform.current = {
+    let modelTransform = {
       translateX: modelAsMercatorCoordinate.x,
       translateY: modelAsMercatorCoordinate.y,
       translateZ: modelAsMercatorCoordinate.z,
@@ -79,7 +70,6 @@ const Map = ({ latestData, isActive }) => {
 
         const loader = new GLTFLoader();
         loader.load('/rocket.gltf', (gltf) => {
-          gltf.scene.scale.set(3, 3, 3); // Scale the model
           this.scene.add(gltf.scene);
           model.current = gltf.scene; // Save reference to the model
         });
@@ -97,29 +87,29 @@ const Map = ({ latestData, isActive }) => {
       render: function (gl, matrix) {
         const rotationX = new THREE.Matrix4().makeRotationAxis(
           new THREE.Vector3(1, 0, 0),
-          modelTransform.current.rotateX
+          modelTransform.rotateX
         );
         const rotationY = new THREE.Matrix4().makeRotationAxis(
           new THREE.Vector3(0, 1, 0),
-          modelTransform.current.rotateY
+          modelTransform.rotateY
         );
         const rotationZ = new THREE.Matrix4().makeRotationAxis(
           new THREE.Vector3(0, 0, 1),
-          modelTransform.current.rotateZ
+          modelTransform.rotateZ
         );
 
         const m = new THREE.Matrix4().fromArray(matrix);
         const l = new THREE.Matrix4()
           .makeTranslation(
-            modelTransform.current.translateX,
-            modelTransform.current.translateY,
-            modelTransform.current.translateZ
+            modelTransform.translateX,
+            modelTransform.translateY,
+            modelTransform.translateZ
           )
           .scale(
             new THREE.Vector3(
-              modelTransform.current.scale,
-              -modelTransform.current.scale,
-              modelTransform.current.scale
+              modelTransform.scale,
+              -modelTransform.scale,
+              modelTransform.scale
             )
           )
           .multiply(rotationX)
@@ -140,27 +130,31 @@ const Map = ({ latestData, isActive }) => {
     return () => {
       map.current.remove();
     };
-  }, []);
+  }, [latestData]);
 
   useEffect(() => {
     if (latestData) {
       const { latitude, longitude, altitude, qr, qi, qj, qk } = latestData;
-
+      console.log("Latitude:", latitude);
+      console.log("Longitude:", longitude);
       if (!isNaN(longitude) && !isNaN(latitude) && !isNaN(altitude)) {
         const newMercatorCoordinate = mapboxgl.MercatorCoordinate.fromLngLat(
           [longitude, latitude],  // Longitude and Latitude
           altitude
         );
 
-        modelTransform.current.translateX = newMercatorCoordinate.x;
-        modelTransform.current.translateY = newMercatorCoordinate.y;
-        modelTransform.current.translateZ = newMercatorCoordinate.z;
-
         if (map.current) {
           map.current.setCenter([longitude, latitude]);
         }
 
         if (model.current) {
+          // Update model position
+          model.current.position.set(
+            newMercatorCoordinate.x,
+            newMercatorCoordinate.y,
+            newMercatorCoordinate.z
+          );
+
           // Update model rotation
           const quaternion = new THREE.Quaternion(qi, qj, qk, qr).normalize();
           model.current.setRotationFromQuaternion(quaternion);
@@ -171,13 +165,7 @@ const Map = ({ latestData, isActive }) => {
     }
   }, [latestData]);
 
-  useEffect(() => {
-    if (map.current) {
-      map.current.resize();
-    }
-  }, [isActive]);
-
   return <div ref={mapContainer} style={{ position: 'relative', top: 0, bottom: 0, width: '100%' }} />;
 };
 
-export default Map;
+export default GeoMap;
