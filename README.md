@@ -1,10 +1,10 @@
-# Ground-Station-GUI
+# Ground Station GUI by `Chan Woo Hwang`
 <div style="display: flex; flex-direction: row;">
     
 ![image](GUIHome.png)
 ![image](TelemetrySample.png)
 
-# Root of the folder
+## Root of the folder
 ```
 ├── client
     ├──src
@@ -25,11 +25,11 @@ This directory contains the Flask server which handles the backend operations. T
 ```transceiver```
 This directory contains the Arduino sketches (.ino files) for various boards used in the telemetry system. Each subdirectory within transceiver/ corresponds to a different board and contains the code needed to operate that board.
 
-# Project Setup Guide
+## Project Setup Guide
 ## Introduction
 This guide provides the steps to set up and run the client and server components of the project. The setup involves navigating to the respective directories, starting the client, and activating the server environment.
 
-## Prerequisites
+### Prerequisites
 Node.js and npm installed
 Python and pip installed
 Virtual environment setup for the server
@@ -73,7 +73,7 @@ bash setup.sh
 ```
 python app.py
 ```
-# Additional Information
+## Additional Information
 Ensure both the client and server are running simultaneously in separate terminals. <br>
 The client will be accessible at the specified URL once started.<br>
 The server will be running on the configured port as defined in app.py.<br>
