@@ -1,5 +1,14 @@
 import React from 'react';
 import logo from '../assets/AB_logo.png';
+import alpsLogo from '../assets/arbSponsor/alpsLogo.png';
+import epoxyLogo from '../assets/arbSponsor/epoxyLogo.png';
+import grtLogo from '../assets/arbSponsor/grtLogo.png';
+import humberValleyLogo from '../assets/arbSponsor/humberValleyLogo.png';
+import lassondeLogo from '../assets/arbSponsor/lassondeLogo.png';
+import lclogo from '../assets/arbSponsor/lclogo.png';
+import logo2 from '../assets/arbSponsor/logo.png';
+import nordSpacelogo from '../assets/arbSponsor/nordSpacelogo.png';
+
 import { useNavigate } from "react-router-dom";
 import { useSocketContext } from '../SocketContext.js';
 import '../css/Home.css';
@@ -11,7 +20,9 @@ export default function Home() {
     isConnected,
     serverIp,
     handleIpChange,
-    toggleConnection,
+    prevServerIp,
+    connectToServer,
+    disconnectToServer
   } = useSocketContext();
 
   const items = [
@@ -20,6 +31,7 @@ export default function Home() {
   ];
 
   return (
+    <>
     <div className='Home'>
       <div className='upper'>
         <img className='logo' src={logo} />
@@ -33,25 +45,38 @@ export default function Home() {
             placeholder="Enter server IP"
             aria-label="Search"
             aria-describedby="button-addon2"
-          />
+            />
           <button
             className="btn btn-outline-secondary"
             type="button"
             id="button-addon2"
-            onClick={toggleConnection}
-          >
+            onClick={isConnected ? disconnectToServer: connectToServer}
+            >
             {isConnected ? 'Disconnect' : 'Connect'}
           </button>
         {items.map((item) => (
           <button
-            key={item.id}
-            className='btn btn-light'
-            onClick={() => navigate(item.id)}
+          key={item.id}
+          className='btn btn-light'
+          onClick={() => navigate(item.id)}
           >
             {item.name}
           </button>
         ))}
       </div>
     </div>
+    <div className='sponsor'>
+    <img className='banner' src = {alpsLogo}/>
+    <img className='banner' src = {epoxyLogo}/>
+    <img className='banner' src = {grtLogo}/>
+    <img className='banner' src = {nordSpacelogo}/>
+    <img className='banner' src = {lassondeLogo}/>
+    <img className='banner' src = {humberValleyLogo}/>
+    <img className='banner' src = {lclogo}/>
+    <img className='banner' src = {logo2}/>
+
+
+    </div>
+        </>
   );
 }

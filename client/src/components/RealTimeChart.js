@@ -1,38 +1,42 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import ChartOverview from './ChartOverview.js';
-import Card from "react-bootstrap/Card";
-import ListGroup from "react-bootstrap/ListGroup";
+import { debounce } from 'lodash';
 import Stack from "react-bootstrap/Stack";
 import { useSocketContext } from '../SocketContext.js';
-import {BMP} from './Cards/TelemetryCards.js'
-import Box from '@mui/material/Box';
+import { BMP } from './Cards/TelemetryCards.js';
+import ChartOverview from './ChartOverview.js';
+import GLTFModelViewer from './GLTFModelViewer';  
 import Maps from './Maps.js';
-
-
 
 export default function RealTimeChart({ isActive }) {
     const [data, setData] = useState([]);
     const [keys, setKeys] = useState([]);
-    const [quaternion, setQuaternion] = useState({ qr: 1, qi: 1, qj: 1, qk: 1 });
-    const {
-        socket,
-        isConnected,
-        toggleUpdate,
-        handleIpChange,
-        toggleConnection,
-        setIsUpdating,
-        setIsConnected,
+    const [quaternion, setQuaternion] = useState({ qw: 1, qx: 0, qy: 0, qz: 0 });
+    const { socket, isConnected, toggleUpdate, isUpdating } = useSocketContext(); 
+    const quaternionStep = useRef(0);
 
-    } = useSocketContext();
-    const chartRefs = useRef({});
+    useEffect(() => {
+        let interval;   
+        if (!isConnected) {
+            interval = setInterval(() => {
+                quaternionStep.current += 1;
+                const angle = (Math.PI / 2) * (quaternionStep.current / 10);
+                const newQuaternion = {
+                    qw: Math.cos(angle / 2),
+                    qx: Math.sin(angle / 2),
+                    qy: 0,
+                    qz: 0
+                };
+                setQuaternion(newQuaternion);
+                if (quaternionStep.current >= 10) {
+                    quaternionStep.current = 0;
+                }
+            }, 100);
+        }
 
-    const handleError = useCallback((error) => {
-        console.error('error:', error);
-        setIsUpdating(false);
-        setIsConnected(false);
-       }, []);
+        return () => clearInterval(interval);
+    }, [isConnected]); 
 
-    const handleGraphUpdate = useCallback((message) => {
+    const handleGraphUpdate = useCallback(debounce((message) => {
         const timestamp = new Date(message.timestamp);
         const hours = timestamp.getHours();
         const minutes = timestamp.getMinutes();
@@ -40,25 +44,25 @@ export default function RealTimeChart({ isActive }) {
 
         const newDataPoint = { x: timeString, ...message };
         setData((prevData) => [...prevData, newDataPoint]);
-        const messageKeys = Object.keys(message).filter(key => key !== 'timestamp' && !key.includes('q'));
 
+        const messageKeys = Object.keys(message).filter(key => key !== 'timestamp' && !key.includes('q'));
         setKeys((prevKeys) => {
             const newKeys = new Set([...prevKeys, ...messageKeys]);
             return Array.from(newKeys);
         });
 
-        if (message.qr !== undefined
-            && message.qi !== undefined
-            && message.qj !== undefined
-            && message.qk !== undefined) {
+        if (message.qw !== undefined
+            && message.qx !== undefined
+            && message.qy !== undefined
+            && message.qz !== undefined) {
             setQuaternion({
-                qr: message.qr,
-                qi: message.qi,
-                qj: message.qj,
-                qk: message.qk
+                qw: message.qw,
+                qx: message.qx,
+                qy: message.qy,
+                qz: message.qz
             });
         }
-    }, []);
+    }, 100), []);
 
     useEffect(() => {
         if (socket) {
@@ -73,24 +77,35 @@ export default function RealTimeChart({ isActive }) {
     const latestData = data.length > 0 ? data[data.length - 1] : {};
 
     return (
-        <Stack direction="horizontal" gap={3}>
-            <div style={{ display: "flex", flexDirection: "row", width: "100%", height: "100%", justifyContent: "space-between" }}>
-                <BMP latestData = {latestData} quaternion = {quaternion}/>
+     <Stack direction='vertical' gap={3}>
+  <h1>Real-time Data Chart</h1>
+  <p>Status: {isConnected ? 'Connected' : 'Disconnected'}</p>
+  <div>
+    {isConnected && (
+      <button className="update-button" onClick={toggleUpdate}>
+        {isUpdating ? 'Stop Updates' : 'Start Updates'}
+      </button>
+    )}
+  </div>
+  
+    <div style={{ width: "100%", height: "100%", justifyContent: "space-between" }}>
+      <BMP latestData={latestData} quaternion={quaternion} />
+      
+  <Stack direction='horizontal' gap={3}>
+      <div style={{ width: "100%", display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+        <div style={{ flex: 1, marginRight: '20px' }}>
+          <GLTFModelViewer modelPath="/Repaired_Stage_3.gltf" quaternion={quaternion} />
+        </div>
+        <div style={{ flex: 1 }}>
+          <ChartOverview
+            keys={keys}
+            data={data}
+          />
+        </div>
+      </div>
+  </Stack>
+    </div>
+</Stack>
 
-                <div style={{ display: "flex", width: "60%", flexDirection: "column" }}>
-                    <div className="mt-20" style={{ width: "100%", display: "flex", flexDirection: "row" }}>
-                        <ChartOverview
-                            keys={keys}
-                            data={data}
-                        />
-                    </div>
-                </div>
-                <div style = {{display: 'flex', width: "20%", height: "100vh", flexDirection: "column"}}>
-                    <div className = "mt-20" style={{width: "100%", height: "100%", display: "flex", flexDirection: "row"}}>
-                        <Maps isActive={isActive} quaternionData={quaternion} latestData={latestData}/>
-                    </div>
-                </div>
-            </div>
-        </Stack>
     );
 }

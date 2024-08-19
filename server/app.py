@@ -1,4 +1,8 @@
-from flask import Flask, jsonify
+import socket
+import subprocess
+import platform
+
+from flask import Flask
 from flask_socketio import SocketIO, emit
 from flask_cors import CORS
 import json
@@ -137,16 +141,53 @@ def halt_update():
 def request_data_by_range(message):
     start = message.get('start')
     end = message.get('end')
-    attribute = message.get('attribute')
+    attributes = message.get('attribute')  # Expecting this to be an array of attributes
     chart_id = message.get('chartId')
+    
+    # Reading data from JSON file for the given range
     data = read_from_json_file(start, end)
-    filtered_data = [{'timestamp': entry['timestamp'], attribute: entry[attribute]} for entry in data if attribute in entry]
-    emit('data_in_range', {'chartId': chart_id, 'data': filtered_data, 'attribute': attribute, 'date': start.split('T')[0]}, namespace='/client')
+    
+    # Filter and format data for the provided attributes
+    filtered_data = []
+    for entry in data:
+        filtered_entry = {'timestamp': entry['timestamp']}
+        for attribute in attributes:
+            if attribute in entry:
+                filtered_entry[attribute] = entry[attribute]
+        if len(filtered_entry) > 1:  # Ensure that we have at least one attribute besides 'timestamp'
+            filtered_data.append(filtered_entry)
+    
+    # Emit the data with the filtered attributes
+    emit('data_in_range', {
+        'chartId': chart_id,
+        'data': filtered_data,
+        'attributes': attributes,  # Send the list of attributes back
+        'date': start.split('T')[0]
+    }, namespace='/client')
 
 @app.route('/')
 def index():
     return "Server is running!"
 
+def get_ipv4_address():
+    system_platform = platform.system()
+    
+    if system_platform == "Windows":
+        result = subprocess.run(["ipconfig"], capture_output=True, text=True)
+        for line in result.stdout.splitlines():
+            if "IPv4" in line:  # Search for any line that contains "IPv4"
+                ipv4_address = line.split(":")[-1].strip()
+                return ipv4_address
+    elif system_platform == "Linux":
+        result = subprocess.run(["hostname", "-I"], capture_output=True, text=True)
+        ipv4_address = result.stdout.split()[0]
+        return ipv4_address
+    
+    return "No IPv4 Address found"
+
 if __name__ == '__main__':
+    ipv4_address = get_ipv4_address()
+    print(f"Starting server on IP address: {ipv4_address}")
+    
     socketio.start_background_task(target=save_and_send_data_background_task)
     socketio.run(app, host='0.0.0.0', port=5000)

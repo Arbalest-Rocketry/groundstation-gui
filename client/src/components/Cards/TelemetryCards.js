@@ -4,6 +4,8 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Box from '@mui/material/Box';
 import { Canvas } from '@react-three/fiber';
 import Scene from '../Rocket.js';
+import GLTFModelViewer from '../GLTFModelViewer';  
+
 import {
   GaugeContainer,
   GaugeValueArc,
@@ -36,7 +38,7 @@ function GaugePointer() {
 
 function BMP({ latestData, quaternion }) {
   return (
-    <div style={{ width: "20%", alignSelf: "flex-start", paddingRight: 10, marginRight: 10 }}>
+    <div style={{ width: "100%", alignSelf: "flex-start", paddingRight: 10, marginRight: 10 }}>
       <Card style={{ width: "100%" }}>
         <Card.Header>BMP</Card.Header>
         <ListGroup>
@@ -44,38 +46,20 @@ function BMP({ latestData, quaternion }) {
           <ListGroup.Item>Pressure: {latestData.pressure || 'N/A'}</ListGroup.Item>
         </ListGroup>
       </Card>
-      <Card style={{ width: "100%" }}>
-        <Card.Header>BNO</Card.Header>
-        <ListGroup>
-          <ListGroup.Item>q_r: {latestData.qr || 'N/A'}</ListGroup.Item>
-          <ListGroup.Item>q_i: {latestData.qi || 'N/A'}</ListGroup.Item>
-          <ListGroup.Item>q_j: {latestData.qj || 'N/A'}</ListGroup.Item>
-          <ListGroup.Item>q_k: {latestData.qk || 'N/A'}</ListGroup.Item>
-        </ListGroup>
-      </Card>
+
       <Card style={{ width: "100%" }}>
         <Card.Header>Altitude</Card.Header>
         <ListGroup>
-          <ListGroup.Item>Altitude: {latestData.altitude || 'N/A'} / 1220</ListGroup.Item>
+          <ListGroup.Item>Altitude: {latestData.altitude || 'N/A'} / 12,200</ListGroup.Item>
         </ListGroup>
         <Box display="flex" justifyContent="center" alignItems="center">
-          <GaugeContainer
-            width={300}
-            height={300}
-            startAngle={-110}
-            endAngle={110}
-            value={latestData.altitude}
-            valueMax={1220}
-            aria-labelledby="battery_level_label"
-            aria-valuetext="50% (6 hours) remaining"
-          >
-            <GaugeReferenceArc />
-            <GaugeValueArc />
-            <GaugePointer />
-          </GaugeContainer>
+          {/* Add your gauge here */}
         </Box>
       </Card>
 
+      {/* <div style={{ marginTop: '20px', width: "100%" }}>
+        <GLTFModelViewer modelPath="/Repaired_Stage_3.gltf" quaternion={quaternion} />
+      </div> */}
     </div>
   );
 }
@@ -102,7 +86,7 @@ function Example({ latestData }) {
             startAngle={-110}
             endAngle={110}
             value={latestData.altitude}
-            valueMax={1220}
+            valueMax={12200}
           >
             <GaugeReferenceArc />
             <GaugeValueArc />

@@ -1,12 +1,12 @@
 .Home {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    height: 100vh;
-    justify-content: space-between;
-    align-items: center;
-    background: linear-gradient(to bottom, #ffffff, #7e7e7e);
-  }
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 90vh; /* Ensures full viewport height */
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(to bottom, #ffffff, #7e7e7e);
+}
   .Home .logo {
     width: 50%;
     filter: drop-shadow(0 0 0.5rem #3f3c3c);
@@ -51,7 +51,6 @@
     justify-content: center;
     flex-direction: column;
   }
-
   .Home .logos {
     display: flex;
     flex-direction: row;
@@ -62,6 +61,24 @@
     max-width: 500px;
     margin: auto;
   }
+  .sponsor {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: linear-gradient(to bottom, #ffffff, #7e7e7e);
+    /* background-color: black; The black background of the sponsor section */
+    width: 100%;
+    min-height: 10vh;
+    padding: 0;
+  }
+  
+  .sponsor img {
+    height: 10vh; /* Adjust size as needed */
+    margin: 0px; /* Space between logos */
+    border-radius: 5px; /* Keep logos with sharp edges */
+    background: linear-gradient(to bottom, #ffffff, #7e7e7e);
+  }
+  
   
   .center{
     align-items: center;

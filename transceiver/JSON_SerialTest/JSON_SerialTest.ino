@@ -17,20 +17,6 @@ void setup() {
   Serial.begin(9600); // Initialize serial communication
   while (!Serial);
 
-  pinMode(RFM95_RST, OUTPUT); // Set reset pin as output
-  digitalWrite(RFM95_RST, HIGH); // Keep reset pin high initially
-  randomSeed(analogRead(0));
-  // Initialize LoRa module
-  if (!rf95.init()) {
-    Serial.println("LoRa initialization failed. Check your connections.");
-    while (true);
-  }
-
-  if (!rf95.setFrequency(RF95_FREQ)) {
-    Serial.println("setFrequency failed");
-    while (1);
-  }
-  rf95.setTxPower(23, false);
 }
 
 void loop() {
@@ -58,10 +44,10 @@ void loop() {
   jsonDoc["latitude"] = latitude;
   jsonDoc["longitude"] = longitude;
   
-  jsonDoc["qr"] = randomqr;
-  jsonDoc["qi"] = randomqi;
-  jsonDoc["qj"] = randomqj;
-  jsonDoc["qk"] = randomqk;
+  jsonDoc["qw"] = randomqr;
+  jsonDoc["qx"] = randomqi;
+  jsonDoc["qy"] = randomqj;
+  jsonDoc["qz"] = randomqk;
   
   if (longitude != longitudeGoal) {
     longitude += 0.001;

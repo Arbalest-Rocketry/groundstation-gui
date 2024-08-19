@@ -8,7 +8,7 @@ const RealTimeChart = lazy(() => import('../components/RealTimeChart.js'));
 const Maps = lazy(() => import('../components/Maps.js'));
 const DataSearch = lazy(() => import('../components/DataSearch.js'));
 const GeoMap = lazy(() => import('../components/GeoMap.js'));
-
+const TrajectoryMap = lazy(() => import('../components/TrajectoryMap.js'));
 export default function Telemetry() {
   const [quaternionData, setQuaternionData] = useState(null);
   const [activeKey, setActiveKey] = useState('controls');
@@ -54,31 +54,25 @@ export default function Telemetry() {
           </div>
         </Tab>
         
-        <Tab tabClassName="tab" eventKey="BNO" title="BNO">
+
+{/*         
+        <Tab tabClassName="tab" eventKey="GPS" title="TrajectoryMap">
           <div className="wrapper">
             <Suspense fallback={<div>Loading...</div>}>
-              <RealTimeChart />
-            </Suspense>
-          </div>
-        </Tab>
-        
-        <Tab tabClassName="tab" eventKey="GPS" title="GPS">
-          <div className="wrapper">
-            <Suspense fallback={<div>Loading...</div>}>
-            <div style={{ position: 'relative', width: '100vw', height: '100vh' }}>
-              <Maps isActive={activeKey === 'GPS'} quaternionData={quaternionData} />
+            <div  style={{ position: 'relative', width: '100vw', height: '100vh' }}>
+              <TrajectoryMap isActive={activeKey === 'GPS'}/>
             </div>
             </Suspense>
           </div>
-        </Tab>
+        </Tab> */}
 
-        <Tab tabClassName="tab" eventKey="GPS3D" title="GPS3D">
+        {/* <Tab tabClassName="tab" eventKey="GPS3D" title="GPS3D">
           <div className="wrapper" style={{ position: 'relative', height: '100vh', width: '100vw' }}>
             <Suspense fallback={<div>Loading...</div>}>
-              <GeoMap />
+              <GeoMap isActive={activeKey === 'GPS3D'}/>
             </Suspense>
           </div>
-        </Tab>
+        </Tab> */}
       </Tabs>
     </>
   );

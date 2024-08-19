@@ -1,5 +1,5 @@
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Brush } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Brush, ResponsiveContainer } from 'recharts';
 
 const Chart = ({ data, dataKey, readDates }) => {
     console.log("Data: ", data);
@@ -12,7 +12,7 @@ const Chart = ({ data, dataKey, readDates }) => {
             const value = parseFloat(point[dataKey]);
             if (isNaN(value)) {
                 console.error(`Invalid value for dataKey "${dataKey}":`, point[dataKey]);
-                return 0; // or handle as needed
+                return 0;
             }
             return value;
         }).filter(value => !isNaN(value)); // filter out non-numeric values
@@ -27,30 +27,30 @@ const Chart = ({ data, dataKey, readDates }) => {
     const yDomain = getYDomain(data);
 
     const formatYAxis = (tickItem) => {
-        return tickItem.toFixed(3); // format Y-axis labels to 2 decimal places
+        return tickItem.toFixed(3); 
     };
 
     return (
-        <LineChart
-
-            width= {700}
-            height={450} // height of chart
-            data={data} // data to be passed to the chart
-            position={'relative'}
-            margin={{ top: 30, right: 20, left: 20, bottom: 80 }} // increased bottom margin
-        >
-            <CartesianGrid strokeDasharray="3 3" /> {/* set the grid style */}
-            <XAxis dataKey={readDates ? "timestamp": "x"} label={{ value: 'Time', position: 'insideBottomLeft', offset: -15 }} /> {/* x-axis setup with offset */}
-            <YAxis
-                domain={yDomain} // set the y domain
-                label={{ value: 'Value', angle: -90, position: 'insideLeft', offset: -10 }}
-                tickFormatter={formatYAxis} // format Y-axis labels
-            /> {/* y-axis setup */}
-            <Tooltip />
-            <Legend verticalAlign="top" height={36} />
-            <Line type="monotone" dataKey={dataKey} stroke="#8884d8" strokeWidth={2} /> {/* dynamically add lines */}
-            <Brush dataKey="timestamp" height={30} stroke="#8884d8" y={370} /> {/* Brush component for zooming */}
-        </LineChart>
+        <div style={{ width: '100%', height: '450px' }}> 
+            <ResponsiveContainer width="100%" height="100%">
+                <LineChart
+                    data={data} 
+                    margin={{ top: 30, right: 20, left: 15, bottom: 80 }} // increased bottom margin
+                >
+                    <CartesianGrid strokeDasharray="3 3" /> 
+                    <XAxis dataKey={readDates ? "timestamp": "x"} label={{ value: 'Time', position: 'insideBottomLeft', offset: -15 }} /> {/* x-axis setup with offset */}
+                    <YAxis
+                        domain={yDomain} 
+                        label={{ value: 'Value', angle: -90, position: 'insideLeft', offset: -10 }}
+                        tickFormatter={formatYAxis} // format Y-axis labels
+                    /> {/* y-axis setup */}
+                    <Tooltip />
+                    <Legend verticalAlign="top" height={36} />
+                    <Line type="monotone" dataKey={dataKey} stroke="#8884d8" strokeWidth={2} /> {/* dynamically add lines */}
+                    <Brush dataKey="timestamp" height={30} stroke="#8884d8" y={370} /> {/* Brush component for zooming */}
+                </LineChart>
+            </ResponsiveContainer>
+        </div>
     );
 };
 
