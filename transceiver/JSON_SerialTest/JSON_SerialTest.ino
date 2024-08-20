@@ -17,6 +17,25 @@ void setup() {
   Serial.begin(9600); // Initialize serial communication
   while (!Serial);
 
+  pinMode(RFM95_RST, OUTPUT); // Set reset pin as output
+
+  // Reset the LoRa module
+  digitalWrite(RFM95_RST, LOW); // Pull the reset pin low
+  delay(10); // Hold it for 10 milliseconds
+  digitalWrite(RFM95_RST, HIGH); // Then pull it high again
+  delay(10); // Allow some time for the module to reset
+
+  if (rf95.init()) {
+    Serial.println("LoRa radio initialized!");
+    rf95.setFrequency(RF95_FREQ);
+    rf95.setTxPower(23, false);
+    rf95.setSpreadingFactor(10);
+    rf95.setSignalBandwidth(62.5E3);
+    rf95.setCodingRate4(8);
+  } else {
+    Serial.println("LoRa radio init failed");
+  }
+
 }
 
 void loop() {

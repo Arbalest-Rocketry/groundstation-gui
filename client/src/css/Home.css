@@ -2,7 +2,8 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-  min-height: 90vh; /* Ensures full viewport height */
+  min-height: 90vh;
+  max-height: 80%;
   justify-content: space-between;
   align-items: center;
   background: linear-gradient(to bottom, #ffffff, #7e7e7e);
@@ -32,7 +33,7 @@
     margin: 20px 0;
   }
   .custom-margin-top {
-    margin-top: 0%; /* Adjust this value as needed */
+    margin-top: 0%; 
   }
   .Home .btn {
     width: 100%;
@@ -45,7 +46,7 @@
     margin: 20px;
   }
   .Home .upper {
-    flex: 5;
+    flex: 3;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -66,17 +67,18 @@
     justify-content: space-around;
     align-items: center;
     background: linear-gradient(to bottom, #ffffff, #7e7e7e);
-    /* background-color: black; The black background of the sponsor section */
     width: 100%;
     min-height: 10vh;
     padding: 0;
   }
-  
+  .sponsor .bethune {
+    height : 20vh;
+        background: linear-gradient(to bottom, #ffffff, #7e7e7e);
+
+  }
   .sponsor img {
-    height: 10vh; /* Adjust size as needed */
-    margin: 0px; /* Space between logos */
-    border-radius: 5px; /* Keep logos with sharp edges */
-    background: linear-gradient(to bottom, #ffffff, #7e7e7e);
+    height: 10vh; 
+    background: transparent;
   }
   
   

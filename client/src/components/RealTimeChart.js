@@ -45,7 +45,7 @@ export default function RealTimeChart({ isActive }) {
         const newDataPoint = { x: timeString, ...message };
         setData((prevData) => [...prevData, newDataPoint]);
 
-        const messageKeys = Object.keys(message).filter(key => key !== 'timestamp' && !key.includes('q'));
+        const messageKeys = Object.keys(message).filter(key => key !== 'timestamp');
         setKeys((prevKeys) => {
             const newKeys = new Set([...prevKeys, ...messageKeys]);
             return Array.from(newKeys);

@@ -141,29 +141,11 @@ def halt_update():
 def request_data_by_range(message):
     start = message.get('start')
     end = message.get('end')
-    attributes = message.get('attribute')  # Expecting this to be an array of attributes
+    attribute = message.get('attribute')
     chart_id = message.get('chartId')
-    
-    # Reading data from JSON file for the given range
     data = read_from_json_file(start, end)
-    
-    # Filter and format data for the provided attributes
-    filtered_data = []
-    for entry in data:
-        filtered_entry = {'timestamp': entry['timestamp']}
-        for attribute in attributes:
-            if attribute in entry:
-                filtered_entry[attribute] = entry[attribute]
-        if len(filtered_entry) > 1:  # Ensure that we have at least one attribute besides 'timestamp'
-            filtered_data.append(filtered_entry)
-    
-    # Emit the data with the filtered attributes
-    emit('data_in_range', {
-        'chartId': chart_id,
-        'data': filtered_data,
-        'attributes': attributes,  # Send the list of attributes back
-        'date': start.split('T')[0]
-    }, namespace='/client')
+    filtered_data = [{'timestamp': entry['timestamp'], attribute: entry[attribute]} for entry in data if attribute in entry]
+    emit('data_in_range', {'chartId': chart_id, 'data': filtered_data, 'attribute': attribute, 'date': start.split('T')[0]}, namespace='/client')
 
 @app.route('/')
 def index():

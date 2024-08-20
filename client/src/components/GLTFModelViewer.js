@@ -42,7 +42,7 @@ const GLTFModelViewer = ({ modelPath, quaternion }) => {
             const axesHelper = new THREE.AxesHelper(100); 
             pivot.add(axesHelper);
 
-            camera.position.set(center.x, center.y + 400 , center.z + 300);
+            camera.position.set(center.x-10, center.y + 400 , center.z+ 150);
             camera.lookAt(center);
         }, undefined, (error) => {
             console.error('Model Load error: ', error);

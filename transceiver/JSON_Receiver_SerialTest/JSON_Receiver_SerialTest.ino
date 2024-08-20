@@ -22,24 +22,19 @@ void setup() {
   digitalWrite(RFM95_RST, HIGH); // Then pull it high again
   delay(10); // Allow some time for the module to reset
 
-  // Initialize LoRa module
-  if (!rf95.init()) {
-    Serial.println("LoRa initialization failed. Check your connections.");
-    while (true); // Stay in an infinite loop if initialization fails
-  }
-
-  if (!rf95.setFrequency(RF95_FREQ)) {
-    Serial.println("setFrequency failed");
-    while (1); // Stay in an infinite loop if setting the frequency fails
+  if (rf95.init()) {
+    Serial.println("LoRa radio initialized!");
+    rf95.setFrequency(RF95_FREQ);
+    rf95.setTxPower(23, false);
+    rf95.setSpreadingFactor(10);
+    rf95.setSignalBandwidth(62.5E3);
+    rf95.setCodingRate4(8);
   } else {
-    Serial.println("setFrequency Success");
+    Serial.println("LoRa radio init failed");
   }
-
-  rf95.setTxPower(23, false);
 }
  
 void loop() {
-  delay(100);
   if (rf95.available()) {
     uint8_t bufReceived[RH_RF95_MAX_MESSAGE_LEN]; // Buffer to hold received data
     uint8_t len = sizeof(bufReceived); // Length of received data

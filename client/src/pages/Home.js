@@ -6,7 +6,7 @@ import grtLogo from '../assets/arbSponsor/grtLogo.png';
 import humberValleyLogo from '../assets/arbSponsor/humberValleyLogo.png';
 import lassondeLogo from '../assets/arbSponsor/lassondeLogo.png';
 import lclogo from '../assets/arbSponsor/lclogo.png';
-import logo2 from '../assets/arbSponsor/logo.png';
+import bethune from '../assets/arbSponsor/bethune.png';
 import nordSpacelogo from '../assets/arbSponsor/nordSpacelogo.png';
 
 import { useNavigate } from "react-router-dom";
@@ -27,7 +27,6 @@ export default function Home() {
 
   const items = [
     { id: 'Telemetry', name: 'Telemetry' },
-    { id: 'analysis', name: 'Analysis' }
   ];
 
   return (
@@ -69,11 +68,11 @@ export default function Home() {
     <img className='banner' src = {alpsLogo}/>
     <img className='banner' src = {epoxyLogo}/>
     <img className='banner' src = {grtLogo}/>
+    <img className='bethune' src = {bethune}/>
     <img className='banner' src = {nordSpacelogo}/>
     <img className='banner' src = {lassondeLogo}/>
     <img className='banner' src = {humberValleyLogo}/>
     <img className='banner' src = {lclogo}/>
-    <img className='banner' src = {logo2}/>
 
 
     </div>
