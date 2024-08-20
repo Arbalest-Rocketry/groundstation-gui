@@ -66,7 +66,7 @@ source venv/Scripts/activate
 
 For Windows:
 ```
-bash setup.sh
+setup.bat
 ```
 For Linux/Mac:
 ```
