@@ -46,11 +46,6 @@ Start the client:
 npm start
 ```
 ### Terminal 2 (T2): Server Setup
-#### Navigate to the server directory:
-
-```
-cd root/server
-```
 
 #### Activate the virtual environment:
 For Windows:
@@ -71,6 +66,10 @@ setup.bat
 For Linux/Mac:
 ```
 source setup.sh
+```
+#### Navigate to the server directory
+```
+cd ../server
 ```
 #### Run the server:
 
