@@ -1,8 +1,8 @@
 # Ground Station GUI by `Chan Woo Hwang`
 <div style="display: flex; flex-direction: row;">
     
-![image](GUIHome.png)
-![image](TelemetrySample.png)
+![image](doc/GroundStationHome.png)
+![image](doc/Telemetry.png)
 
 ## Root of the folder
 ```
