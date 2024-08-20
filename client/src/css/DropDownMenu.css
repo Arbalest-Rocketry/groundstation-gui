@@ -32,7 +32,7 @@
   
   .dropdown-logo {
     filter: drop-shadow(0 0 0.5rem #3f3c3c);
-    margin-left: 20px; /* Adjust as needed */
+    margin-left: 20px; 
     margin-right: 20px;
   }
   
@@ -73,6 +73,6 @@
   
   .nav-item a {
     white-space: nowrap;
-    margin-right: 10px; /* Adjust as needed */
+    margin-right: 10px;
   }
   

@@ -42,15 +42,15 @@ function BMP({ latestData, quaternion }) {
       <Card style={{ width: "100%" }}>
         <Card.Header>BMP</Card.Header>
         <ListGroup>
-          <ListGroup.Item>Temperature: {latestData.temperature || 'N/A'}</ListGroup.Item>
-          <ListGroup.Item>Pressure: {latestData.pressure || 'N/A'}</ListGroup.Item>
+          <ListGroup.Item style={{ fontSize: "30px"}}>Temperature: {latestData.temperature || 'N/A'} °C</ListGroup.Item>
+          <ListGroup.Item style={{ fontSize: "30px"}}> Pressure: {latestData.pressure || 'N/A'} hPa</ListGroup.Item>
         </ListGroup>
       </Card>
 
       <Card style={{ width: "100%" }}>
         <Card.Header>Altitude</Card.Header>
         <ListGroup>
-          <ListGroup.Item>Altitude: {latestData.altitude || 'N/A'} / 12,200</ListGroup.Item>
+          <ListGroup.Item style={{ fontSize: "30px"}}>Altitude: {latestData.altitude || 'N/A'} / 12,200 m</ListGroup.Item>
         </ListGroup>
         <Box display="flex" justifyContent="center" alignItems="center">
           {/* Add your gauge here */}

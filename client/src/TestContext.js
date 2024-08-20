@@ -18,15 +18,7 @@ export const TestProvider = ({childeren}) => {
  
 
     const createTestData = useCallback((testData) => {
-        const today = new Date();
-        const hours = today.getHours();
-        const minutes = today.getMinutes();
-        const timeString = `${hours}:${minutes < 10 ? '0' + minutes: minutes }`;
 
-        altitude+= 0.1;
-        pressure+=0.1;
-        temperature+=0.1;
-        
         quaternionStep.current += 1;
         const angle = (Math.PI / 2) * (quaternionStep.current / 10);
         const newQuaternion = {
