@@ -8,11 +8,14 @@ import { useSocketContext } from '../SocketContext.js';
 
 const DropdownMenu = ({ onToggle }) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
+  const [inputServerIP, setInputServerIp] = useState('');
   const {
     isConnected,
     serverIp,
     handleIpChange,
-    toggleConnection
+    prevServerIp,
+    connectToServer,
+    disconnectToServer
   } = useSocketContext();
 
 
@@ -79,14 +82,15 @@ const DropdownMenu = ({ onToggle }) => {
 
     </div>
     
-    <input type="text" class="form-control" value={serverIp}
-          onChange={handleIpChange}
+    <input type="text" class="form-control"  value={serverIp}
+            onChange={handleIpChange}
           placeholder="Enter server IP"
           aria-label="Search" aria-describedby="button-addon2"/>
   <button class="btn btn-outline-secondary"
     type="button"
       id="button-addon2"
-      onClick={toggleConnection}>{isConnected ? 'Disconnect' : 'Connect'}</button>
+      onClick={isConnected ? disconnectToServer: connectToServer}>
+        {isConnected ? 'Disconnect' : 'Connect'}</button>
   </div>
 </nav>
 

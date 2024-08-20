@@ -1,169 +1,144 @@
 import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiYWNyZmFjdG9yeSIsImEiOiJjbHg4eGVkb3YyZnlxMmpvYWV6ZDNuY2MyIn0.leZ1_Go8xIbTMXC8MmDBBw';
 
-const MapComponent = ({ isActive, quaternionData, latestData }) => {
+const MapComponent = ({ isActive, latestData, trajData }) => {
     const mapContainerRef = useRef(null);
     const mapRef = useRef(null);
-    const modelRef = useRef(null);
 
-    const [modelPosition, setModelPosition] = useState({
-        //         43.771870, -79.506625
+    const [mapPosition, setMapPosition] = useState({
         latitude: 43.771870,
-        longitude: -79.506625,
-        altitude: 0
+        longitude: -79.506625
     });
+    
+    const [gpsPoints, setGpsPoints] = useState([]);
 
     useEffect(() => {
-        if (mapRef.current) {
-            mapRef.current.resize();
-        }
-    }, [isActive]);
-
-    useEffect(() => {
-        mapboxgl.accessToken = 'pk.eyJ1IjoiYWNyZmFjdG9yeSIsImEiOiJjbHg4eGVkb3YyZnlxMmpvYWV6ZDNuY2MyIn0.leZ1_Go8xIbTMXC8MmDBBw';
         const map = new mapboxgl.Map({
             container: mapContainerRef.current,
-            style: 'mapbox://styles/mapbox/light-v11',
+            style: 'mapbox://styles/acrfactory/clzx8zbln008101qr0p28bjxz',
             zoom: 18,
-            center: [modelPosition.longitude, modelPosition.latitude],
-            pitch: 60,
-            antialias: true
+            center: [mapPosition.longitude, mapPosition.latitude],
+            pitch: 0
         });
 
         mapRef.current = map;
 
-        const modelAsMercatorCoordinate = mapboxgl.MercatorCoordinate.fromLngLat(
-            [modelPosition.longitude, modelPosition.latitude],
-            modelPosition.altitude
-        );
+        map.on('load', () => {
+            map.addSource('trajectory', {
+                type: 'geojson',
+                data: {
+                    type: 'FeatureCollection',
+                    features: []
+                }
+            });
 
-        const modelScale = 3; // Increase this value to scale up the model
+            map.addLayer({
+                id: 'trajectory-line',
+                type: 'line',
+                source: 'trajectory',
+                layout: {
+                    'line-join': 'round',
+                    'line-cap': 'round'
+                },
+                paint: {
+                    'line-color': '#ff7f00',
+                    'line-width': 4
+                }
+            });
 
-        const modelTransform = {
-            translateX: modelAsMercatorCoordinate.x,
-            translateY: modelAsMercatorCoordinate.y,
-            translateZ: modelAsMercatorCoordinate.z,
-            rotateX: Math.PI / 2,
-            rotateY: 0,
-            rotateZ: 0,
-            scale: modelAsMercatorCoordinate.meterInMercatorCoordinateUnits() * modelScale
-        };
-
-        const customLayer = {
-            id: '3d-model',
-            type: 'custom',
-            renderingMode: '3d',
-            onAdd: function (map, gl) {
-                this.camera = new THREE.Camera();
-                this.scene = new THREE.Scene();
-
-                const directionalLight = new THREE.DirectionalLight(0xffffff);
-                directionalLight.position.set(0, -70, 100).normalize();
-                this.scene.add(directionalLight);
-
-                const directionalLight2 = new THREE.DirectionalLight(0xffffff);
-                directionalLight2.position.set(0, 70, 100).normalize();
-                this.scene.add(directionalLight2);
-
-                const loader = new GLTFLoader();
-                loader.load(
-                    '/rocket.gltf', // Ensure this path is correct and the file is in the public folder
-                    (gltf) => {
-                        gltf.scene.scale.set(modelScale, modelScale, modelScale); // Scale the model
-                        modelRef.current = gltf.scene;
-                        this.scene.add(gltf.scene);
-                    }
-                );
-                this.map = map;
-
-                this.renderer = new THREE.WebGLRenderer({
-                    canvas: map.getCanvas(),
-                    context: gl,
-                    antialias: true
-                });
-
-                this.renderer.autoClear = false;
-            },
-            render: function (gl, matrix) {
-                const rotationX = new THREE.Matrix4().makeRotationAxis(
-                    new THREE.Vector3(1, 0, 0),
-                    modelTransform.rotateX
-                );
-                const rotationY = new THREE.Matrix4().makeRotationAxis(
-                    new THREE.Vector3(0, 1, 0),
-                    modelTransform.rotateY
-                );
-                const rotationZ = new THREE.Matrix4().makeRotationAxis(
-                    new THREE.Vector3(0, 0, 1),
-                    modelTransform.rotateZ
-                );
-
-                const m = new THREE.Matrix4().fromArray(matrix);
-                const l = new THREE.Matrix4()
-                    .makeTranslation(
-                        modelTransform.translateX,
-                        modelTransform.translateY,
-                        modelTransform.translateZ
-                    )
-                    .scale(
-                        new THREE.Vector3(
-                            modelTransform.scale,
-                            -modelTransform.scale,
-                            modelTransform.scale
-                        )
-                    )
-                    .multiply(rotationX)
-                    .multiply(rotationY)
-                    .multiply(rotationZ);
-
-                this.camera.projectionMatrix = m.multiply(l);
-                this.renderer.resetState();
-                this.renderer.render(this.scene, this.camera);
-                this.map.triggerRepaint();
-            }
-        };
-
-        map.on('style.load', () => {
-            map.addLayer(customLayer, 'waterway-label');
+            map.addLayer({
+                id: 'trajectory-points',
+                type: 'circle',
+                source: 'trajectory',
+                paint: {
+                    'circle-radius': 5,
+                    'circle-color': '#007cbf'
+                }
+            });
         });
 
+        return () => {
+            map.remove();
+        };
+    }, [mapPosition]);
+
+    useEffect(() => {
+        if (!isActive) return;
+
         const handleResize = () => {
-            map.resize();
+            mapRef.current.resize();
         };
 
         window.addEventListener('resize', handleResize);
 
         return () => {
-            map.remove();
             window.removeEventListener('resize', handleResize);
         };
-    }, [modelPosition]);
+    }, [isActive]);
 
     useEffect(() => {
-        if (modelRef.current && quaternionData) {
-            const { qi, qj, qk, qr } = quaternionData;
-            const quaternion = new THREE.Quaternion(qi, qj, qk, qr).normalize();
-            modelRef.current.setRotationFromQuaternion(quaternion);
-        }
-    }, [quaternionData]);
+        if (mapRef.current && latestData) {
+            const { longitude, latitude } = latestData;
 
-    useEffect(() => {
-        if (latestData) {
-            setModelPosition({
-                longitude: latestData.longitude || modelPosition.longitude,
-                latitude: latestData.latitude || modelPosition.latitude,
-                altitude: latestData.altitude || modelPosition.altitude
-            });
+            if (longitude && latitude) {
+                mapRef.current.setCenter([longitude, latitude]);
+            }
         }
     }, [latestData]);
 
+    useEffect(() => {
+        if (mapRef.current && trajData && trajData.length > 0) {
+            const newGpsPoints = trajData.map(({ longitude, latitude, timestamp }) => ({
+                type: 'Feature',
+                geometry: {
+                    type: 'Point',
+                    coordinates: [longitude, latitude]
+                },
+                properties: {
+                    timestamp,
+                    latitude,
+                    longitude
+                }
+            }));
+
+            const lineCoordinates = trajData.map(({ longitude, latitude }) => [longitude, latitude]);
+
+            setGpsPoints(newGpsPoints);
+
+            mapRef.current.getSource('trajectory').setData({
+                type: 'FeatureCollection',
+                features: [
+                    {
+                        type: 'Feature',
+                        geometry: {
+                            type: 'LineString',
+                            coordinates: lineCoordinates
+                        },
+                        properties: {}
+                    },
+                    ...newGpsPoints
+                ]
+            });
+
+            // Add popups for each point
+            newGpsPoints.forEach((point) => {
+                const popup = new mapboxgl.Popup({ offset: 25 })
+                    .setText(`Time: ${point.properties.timestamp}\nLat: ${point.properties.latitude}\nLng: ${point.properties.longitude}`);
+
+                new mapboxgl.Marker()
+                    .setLngLat(point.geometry.coordinates)
+                    .setPopup(popup)
+                    .addTo(mapRef.current);
+            });
+        }
+    }, [trajData]);
+
     return (
-        <div ref={mapContainerRef} style={{ position: 'relative', top: 0, left: 0, width: '100%', height: '100%' }}></div>
+        <div ref={mapContainerRef} style={{ position: 'relative', top: 0, left: 0, width: '100%', height: '100%' }}>
+        </div>
     );
 };
 

@@ -7,8 +7,7 @@ import { useSocketContext } from '../SocketContext.js';
 
 export default function ChartOverview({
   keys = [],
-  data = [],
-  quaternion = { qr: 1, qi: 1, qj: 1, qk: 1 }
+  data = [],  
 }) {
   const [highlightedKey, setHighlightedKey] = useState(null);
   const chartRefs = useRef({});
@@ -37,23 +36,23 @@ export default function ChartOverview({
       ref={(el) => (chartRefs.current[key] = el)}
       onClick={() => handleChartClick(key)}
       className={`${highlightedKey === key ? 'highlighted' : ''} container-fluid`}
-      style={{ marginBottom: '20px', marginRight: '10%', marginLeft: '10%', width: '100%', position: 'relative', zIndex: 1 }}
+      style={{ marginBottom: '20px', marginRight: '10%', marginLeft: '0%', width: '100%', position: 'relative', zIndex: 1 }}
     >
       <Chart data={data} dataKey={key} readDates={false} />
     </div>
   )), [keys, data, handleChartClick, highlightedKey]);
 
+  const linearChartData = useMemo(() => {
+    const dataPoints = [];
+    for (let x = 0; x <= 10; x++) {
+      dataPoints.push({ x, y: 2 * x + 1 });
+    }
+    return dataPoints;
+  }, []);
+
   return (
-    <div onClick={handleContainerClick}>
-      <h1>Real-time Data Chart</h1>
-      <p>Status: {isConnected ? 'Connected' : 'Disconnected'}</p>
-      <div>
-        {isConnected && (
-          <button className="update-button" onClick={toggleUpdate}>
-            {isUpdating ? 'Stop Updates' : 'Start Updates'}
-          </button>
-        )}
-      </div>
+    <div onClick={handleContainerClick} style={{ width: '100%', }}>
+
       <div className="chart-links">
         {keys.map((key) => (
           <button key={key} onClick={() => scrollToChart(key)}>
@@ -63,16 +62,8 @@ export default function ChartOverview({
       </div>
       <div className="chart-container" style={{ position: 'relative', width: '100%' }}>
         {renderedKeys}
-        {/* {keys.length > 0 && (
-          <div style={{ height: '400px', position: 'relative', marginTop: '20px' }}>
-            <Canvas style={{ position: 'relative', width: '100%', height: '100%', zIndex: 0 }}>
-              <ambientLight intensity={0.5} />
-              <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-              <pointLight position={[-10, -10, -10]} />
-              <Rocket quaternionData={quaternion} position={[0, 0, 0]} />
-            </Canvas>
-          </div>
-        )} */}
+
+
       </div>
     </div>
   );

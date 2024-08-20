@@ -10,53 +10,77 @@
 
 RH_RF95 rf95(RFM95_CS, RFM95_INT); // Initialize the LoRa module with the specified pins
 
-unsigned long lastSwitchTime = 0; // Variable to keep track of the last switch time
-const unsigned long switchInterval = 5000; // Interval for switching tasks in milliseconds
-
 void setup() {
   Serial.begin(9600); // Initialize serial communication
   while (!Serial);
 
   pinMode(RFM95_RST, OUTPUT); // Set reset pin as output
-  digitalWrite(RFM95_RST, HIGH); // Keep reset pin high initially
+
+  // Reset the LoRa module
+  digitalWrite(RFM95_RST, LOW); // Pull the reset pin low
+  delay(10); // Hold it for 10 milliseconds
+  digitalWrite(RFM95_RST, HIGH); // Then pull it high again
+  delay(10); // Allow some time for the module to reset
 
   // Initialize LoRa module
   if (!rf95.init()) {
     Serial.println("LoRa initialization failed. Check your connections.");
-    while (true);
-  } 
+    while (true); // Stay in an infinite loop if initialization fails
+  }
 
   if (!rf95.setFrequency(RF95_FREQ)) {
     Serial.println("setFrequency failed");
-    while (1);
+    while (1); // Stay in an infinite loop if setting the frequency fails
   } else {
     Serial.println("setFrequency Success");
   }
+
   rf95.setTxPower(23, false);
 }
-
+ 
 void loop() {
-  unsigned long currentTime = millis();
-
+  delay(100);
   if (rf95.available()) {
-    uint8_t bufReceived[RH_RF95_MAX_MESSAGE_LEN];
+    uint8_t bufReceived[RH_RF95_MAX_MESSAGE_LEN]; // Buffer to hold received data
     uint8_t len = sizeof(bufReceived); // Length of received data
+
+    // Attempt to receive data
     if (rf95.recv(bufReceived, &len)) {
       DynamicJsonDocument jsonDoc(256);
       DeserializationError error = deserializeJson(jsonDoc, bufReceived, len);
 
+      // Check if deserialization was successful
       if (error) {
         Serial.print(F("deserializeJson() failed: "));
         Serial.println(error.c_str());
-      } else {
-        // Create a JSON string to send over Serial
-        String jsonString;
-        serializeJson(jsonDoc, jsonString);
-        Serial.write(jsonString.c_str(), jsonString.length());
-        Serial.write('\n'); // Add a newline character for better readability
+        return;
       }
 
-      delay(300); // Delay for 1 second between data sends
+      // Retrieve data from JSON
+      float temperature = jsonDoc["temperature"];
+      float pressure = jsonDoc["pressure"];
+      float altitude = jsonDoc["altitude"];
+      float qw = jsonDoc["qw"];
+      float qx = jsonDoc["qx"];
+      float qy = jsonDoc["qy"];
+      float qz = jsonDoc["qz"];
+
+      // Send the parsed data over Serial as JSON
+      DynamicJsonDocument outputJson(256);
+      outputJson["temperature"] = temperature;
+      outputJson["pressure"] = pressure;
+      outputJson["altitude"] = altitude;
+      outputJson["qw"] = qw;
+      outputJson["qx"] = qx;
+      outputJson["qy"] = qy;
+      outputJson["qz"] = qz;
+
+      // Serialize and print to Serial
+      String outputString;
+      serializeJson(outputJson, outputString);
+      Serial.println(outputString);
+    } else {
+      Serial.println("Receive failed");
     }
   }
 }

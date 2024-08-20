@@ -1,1 +1,5 @@
 /client/node_modules/
+/client/build/
+
+/server/received_message.json
+*.log
