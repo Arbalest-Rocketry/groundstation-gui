@@ -64,10 +64,14 @@ source venv/Scripts/activate
 
 #### Install the dependencies:
 
+For Windows:
 ```
 bash setup.sh
 ```
-
+For Linux/Mac:
+```
+source setup.sh
+```
 #### Run the server:
 
 ```
