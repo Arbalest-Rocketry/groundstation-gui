@@ -34,6 +34,18 @@ Node.js and npm installed
 Python and pip installed
 Virtual environment setup for the server
 ## Setup Steps
+#### Install the dependencies:
+Navigate to the root directory:
+
+For Windows:
+```
+setup.bat
+```
+For Linux/Mac:
+```
+source setup.sh
+```
+
 ### Terminal 1 (T1): Client Setup
 Navigate to the client directory:
 
@@ -57,16 +69,6 @@ For Linux/Mac:
 source venv/Scripts/activate
 ```
 
-#### Install the dependencies:
-
-For Windows:
-```
-setup.bat
-```
-For Linux/Mac:
-```
-source setup.sh
-```
 #### Navigate to the server directory
 ```
 cd ../server
