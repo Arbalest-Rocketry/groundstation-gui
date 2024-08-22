@@ -49,10 +49,19 @@ should_run = False  # decide whether to receive data from teensy
 
 def save_and_send_data_background_task():
     global ser
+    latitude = 47.99108
+    longitude = -81.85124
+
     while True:
         socketio.sleep(socketSleep)
         data_with_timestamp = read_serial()
         if data_with_timestamp:
+            latitude += 0.01
+            longitude += 0.01
+            
+            data_with_timestamp["latitude"] = latitude
+            data_with_timestamp["longitude"] = longitude
+            
             save_to_json_file(data_with_timestamp)
             print('saved', data_with_timestamp)
             if should_run:
@@ -146,6 +155,33 @@ def request_data_by_range(message):
     data = read_from_json_file(start, end)
     filtered_data = [{'timestamp': entry['timestamp'], attribute: entry[attribute]} for entry in data if attribute in entry]
     emit('data_in_range', {'chartId': chart_id, 'data': filtered_data, 'attribute': attribute, 'date': start.split('T')[0]}, namespace='/client')
+
+@socketio.on('request_trajectory', namespace='/client')
+def request_data_by_range(message):
+    start = message.get('start')
+    end = message.get('end')
+    attributes = message.get('attribute')  
+    chart_id = message.get('chartId')
+    
+
+    data = read_from_json_file(start, end)
+    
+
+    filtered_data = []
+    for entry in data:
+        filtered_entry = {'timestamp': entry['timestamp']}
+        for attribute in attributes:
+            if attribute in entry:
+                filtered_entry[attribute] = entry[attribute]
+        if len(filtered_entry) > 1:  
+            filtered_data.append(filtered_entry)
+    
+    emit('gps_in_range', {
+        'chartId': chart_id,
+        'data': filtered_data,
+        'attributes': attributes,  
+        'date': start.split('T')[0]
+    }, namespace='/client')
 
 @app.route('/')
 def index():
